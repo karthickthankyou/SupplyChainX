@@ -20,6 +20,7 @@ import { Distributor } from 'src/models/distributors/graphql/entity/distributor.
 import { Retailer } from 'src/models/retailers/graphql/entity/retailer.entity'
 import { Inventory } from 'src/models/inventories/graphql/entity/inventory.entity'
 import { Transaction } from 'src/models/transactions/graphql/entity/transaction.entity'
+import { Location } from 'src/models/locations/graphql/entity/location.entity'
 
 @Resolver(() => Warehouse)
 export class WarehousesResolver {

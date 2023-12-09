@@ -37,16 +37,9 @@ type Credential {
 type Manufacturer {
   uid: String!
   createdAt: DateTime!
-}
-
-type Distributor {
-  uid: String!
-  createdAt: DateTime!
-}
-
-type Retailer {
-  uid: String!
-  createdAt: DateTime!
+  user: User!
+  products: [Product!]!
+  warehouses: [Warehouse!]!
 }
 
 type Product {
@@ -56,6 +49,9 @@ type Product {
   createdAt: DateTime!
   updatedAt: DateTime!
   manufacturerId: String!
+  manufacturer: Manufacturer!
+  inventories: [Inventory!]!
+  transactions: [Transaction!]!
 }
 
 type Warehouse {
@@ -66,6 +62,27 @@ type Warehouse {
   createdAt: DateTime!
   updatedAt: DateTime!
   name: String!
+  location: Location
+  manufacturer: Manufacturer
+  distributor: Distributor
+  retailer: Retailer
+  inventories: [Inventory!]!
+  outs: [Transaction!]!
+  ins: [Transaction!]!
+}
+
+type Distributor {
+  uid: String!
+  createdAt: DateTime!
+  user: User!
+  warehouses: [Warehouse!]!
+}
+
+type Retailer {
+  uid: String!
+  createdAt: DateTime!
+  user: User!
+  warehouses: [Warehouse!]!
 }
 
 type Inventory {
@@ -75,6 +92,8 @@ type Inventory {
   productId: Int!
   warehouseId: Int!
   quantity: Int!
+  product: Product!
+  warehouse: Warehouse!
 }
 
 type Transaction {
@@ -85,6 +104,9 @@ type Transaction {
   fromWarehouseId: Int!
   toWarehouseId: Int!
   quantity: Int!
+  product: Product!
+  fromWarehouse: Warehouse!
+  toWarehouse: Warehouse!
 }
 
 type Location {
@@ -93,6 +115,7 @@ type Location {
   longitude: Int!
   address: String!
   warehouseId: Int!
+  warehouse: Warehouse!
 }
 
 type Query {
