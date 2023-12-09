@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
     provider = "prisma-client-js"
 }
@@ -19,6 +16,10 @@ model User {
 
     credentials  Credentials?
     authProvider AuthProvider?
+
+    manufacturer Manufacturer?
+    distributor  Distributor?
+    retailer     Retailer?
 }
 
 model Credentials {
@@ -42,9 +43,98 @@ enum AuthProviderType {
     CREDENTIALS
 }
 
-model Item {
+model Manufacturer {
+    uid        String      @id
+    createdAt  DateTime    @default(now())
+    user       User        @relation(fields: [uid], references: [uid])
+    products   Product[]
+    warehouses Warehouse[]
+}
+
+model Distributor {
+    uid        String      @id
+    createdAt  DateTime    @default(now())
+    user       User        @relation(fields: [uid], references: [uid])
+    warehouses Warehouse[]
+}
+
+model Retailer {
+    uid        String      @id
+    createdAt  DateTime    @default(now())
+    user       User        @relation(fields: [uid], references: [uid])
+    warehouses Warehouse[]
+}
+
+model Product {
+    id          Int     @id @default(autoincrement())
+    name        String
+    description String?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    manufacturerId String
+    manufacturer   Manufacturer  @relation(fields: [manufacturerId], references: [uid])
+    inventories    Inventory[]
+    transactions   Transaction[]
+}
+
+model Warehouse {
+    id Int @id @default(autoincrement())
+
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    name      String
+    location  Location?
+
+    manufacturerId String?
+    manufacturer   Manufacturer? @relation(fields: [manufacturerId], references: [uid])
+
+    distributorId String?
+    distributor   Distributor? @relation(fields: [distributorId], references: [uid])
+
+    retailerId String?
+    retailer   Retailer? @relation(fields: [retailerId], references: [uid])
+
+    inventories Inventory[]
+    outs        Transaction[] @relation("FromWarehouse")
+    ins         Transaction[] @relation("ToWarehouse")
+}
+
+model Location {
+    id        Int    @id @default(autoincrement())
+    latitude  Float
+    longitude Float
+    address   String
+
+    warehouse   Warehouse @relation(fields: [warehouseId], references: [id])
+    warehouseId Int       @unique
+}
+
+model Inventory {
+    id Int @id @default(autoincrement())
+
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+    productId   Int
+    product     Product   @relation(fields: [productId], references: [id])
+    warehouseId Int
+    warehouse   Warehouse @relation(fields: [warehouseId], references: [id])
+
+    quantity Int
+}
+
+model Transaction {
     id        Int      @id @default(autoincrement())
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-    name      String
+
+    productId       Int
+    fromWarehouseId Int
+    toWarehouseId   Int
+    quantity        Int
+
+    product       Product   @relation(fields: [productId], references: [id])
+    fromWarehouse Warehouse @relation("FromWarehouse", fields: [fromWarehouseId], references: [id])
+    toWarehouse   Warehouse @relation("ToWarehouse", fields: [toWarehouseId], references: [id])
 }

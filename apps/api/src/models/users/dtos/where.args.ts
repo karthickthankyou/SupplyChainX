@@ -5,6 +5,9 @@ import {
   RestrictProperties,
   StringFilter,
 } from 'src/common/dtos/common.input'
+import { DistributorRelationFilter } from 'src/models/distributors/graphql/dtos/where.args'
+import { ManufacturerRelationFilter } from 'src/models/manufacturers/graphql/dtos/where.args'
+import { RetailerRelationFilter } from 'src/models/retailers/graphql/dtos/where.args'
 
 @InputType()
 export class UserWhereUniqueInput {
@@ -19,6 +22,9 @@ export class UserWhereInputStrict
       Omit<Prisma.UserWhereInput, 'credentials' | 'authProvider'>
     >
 {
+  manufacturer: ManufacturerRelationFilter
+  distributor: DistributorRelationFilter
+  retailer: RetailerRelationFilter
   uid: StringFilter
   createdAt: DateTimeFilter
   updatedAt: DateTimeFilter
