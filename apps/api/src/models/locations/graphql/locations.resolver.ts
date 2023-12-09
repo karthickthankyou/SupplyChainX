@@ -1,13 +1,25 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql'
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql'
 import { LocationsService } from './locations.service'
 import { Location } from './entity/location.entity'
 import { FindManyLocationArgs, FindUniqueLocationArgs } from './dtos/find.args'
 import { CreateLocationInput } from './dtos/create-location.input'
 import { UpdateLocationInput } from './dtos/update-location.input'
+import { PrismaService } from 'src/common/prisma/prisma.service'
+import { Warehouse } from 'src/models/warehouses/graphql/entity/warehouse.entity'
 
 @Resolver(() => Location)
 export class LocationsResolver {
-  constructor(private readonly locationsService: LocationsService) {}
+  constructor(
+    private readonly locationsService: LocationsService,
+    private readonly prisma: PrismaService,
+  ) {}
 
   @Mutation(() => Location)
   createLocation(@Args('createLocationInput') args: CreateLocationInput) {
@@ -32,5 +44,12 @@ export class LocationsResolver {
   @Mutation(() => Location)
   removeLocation(@Args() args: FindUniqueLocationArgs) {
     return this.locationsService.remove(args)
+  }
+
+  @ResolveField(() => Warehouse)
+  warehouse(@Parent() location: Location) {
+    return this.prisma.warehouse.findUnique({
+      where: { id: location.warehouseId },
+    })
   }
 }

@@ -1,13 +1,27 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql'
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql'
 import { ProductsService } from './products.service'
 import { Product } from './entity/product.entity'
 import { FindManyProductArgs, FindUniqueProductArgs } from './dtos/find.args'
 import { CreateProductInput } from './dtos/create-product.input'
 import { UpdateProductInput } from './dtos/update-product.input'
+import { PrismaService } from 'src/common/prisma/prisma.service'
+import { Manufacturer } from 'src/models/manufacturers/graphql/entity/manufacturer.entity'
+import { Inventory } from 'src/models/inventories/graphql/entity/inventory.entity'
+import { Transaction } from 'src/models/transactions/graphql/entity/transaction.entity'
 
 @Resolver(() => Product)
 export class ProductsResolver {
-  constructor(private readonly productsService: ProductsService) {}
+  constructor(
+    private readonly productsService: ProductsService,
+    private readonly prisma: PrismaService,
+  ) {}
 
   @Mutation(() => Product)
   createProduct(@Args('createProductInput') args: CreateProductInput) {
@@ -32,5 +46,26 @@ export class ProductsResolver {
   @Mutation(() => Product)
   removeProduct(@Args() args: FindUniqueProductArgs) {
     return this.productsService.remove(args)
+  }
+
+  @ResolveField(() => Manufacturer)
+  manufacturer(@Parent() product: Product) {
+    return this.prisma.product.findUnique({
+      where: { id: product.id },
+    }).manufacturer
+  }
+
+  @ResolveField(() => [Inventory])
+  inventories(@Parent() product: Product) {
+    return this.prisma.inventory.findMany({
+      where: { productId: product.id },
+    })
+  }
+
+  @ResolveField(() => [Transaction])
+  transactions(@Parent() product: Product) {
+    return this.prisma.transaction.findMany({
+      where: { productId: product.id },
+    })
   }
 }

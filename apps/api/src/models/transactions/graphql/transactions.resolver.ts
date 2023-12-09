@@ -1,4 +1,11 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql'
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql'
 import { TransactionsService } from './transactions.service'
 import { Transaction } from './entity/transaction.entity'
 import {
@@ -7,10 +14,16 @@ import {
 } from './dtos/find.args'
 import { CreateTransactionInput } from './dtos/create-transaction.input'
 import { UpdateTransactionInput } from './dtos/update-transaction.input'
+import { PrismaService } from 'src/common/prisma/prisma.service'
+import { Product } from 'src/models/products/graphql/entity/product.entity'
+import { Warehouse } from 'src/models/warehouses/graphql/entity/warehouse.entity'
 
 @Resolver(() => Transaction)
 export class TransactionsResolver {
-  constructor(private readonly transactionsService: TransactionsService) {}
+  constructor(
+    private readonly transactionsService: TransactionsService,
+    private readonly prisma: PrismaService,
+  ) {}
 
   @Mutation(() => Transaction)
   createTransaction(
@@ -39,5 +52,26 @@ export class TransactionsResolver {
   @Mutation(() => Transaction)
   removeTransaction(@Args() args: FindUniqueTransactionArgs) {
     return this.transactionsService.remove(args)
+  }
+
+  @ResolveField(() => Product)
+  product(@Parent() transaction: Transaction) {
+    return this.prisma.product.findUnique({
+      where: { id: transaction.productId },
+    })
+  }
+
+  @ResolveField(() => Warehouse)
+  fromWarehouse(@Parent() transaction: Transaction) {
+    return this.prisma.warehouse.findUnique({
+      where: { id: transaction.fromWarehouseId },
+    })
+  }
+
+  @ResolveField(() => Warehouse)
+  toWarehouse(@Parent() transaction: Transaction) {
+    return this.prisma.warehouse.findUnique({
+      where: { id: transaction.toWarehouseId },
+    })
   }
 }
