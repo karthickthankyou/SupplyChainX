@@ -1126,6 +1126,7 @@ export type MyWarehousesQuery = {
     __typename?: 'Warehouse'
     id: number
     name: string
+    description?: string | null
     createdAt: any
     inventories: Array<{
       __typename?: 'Inventory'
@@ -1596,6 +1597,7 @@ export const MyWarehousesDocument = /*#__PURE__*/ {
               selections: [
                 { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
                 {
                   kind: 'Field',

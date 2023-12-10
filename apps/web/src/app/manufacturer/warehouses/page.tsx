@@ -5,6 +5,7 @@ import {
   namedOperations,
 } from '@foundation/network/src/generated'
 import Link from 'next/link'
+import { WarehouseCard } from '@foundation/ui/src/components/organisms/WarehouseCard'
 
 export default async function WarehousesPage() {
   const { data, error } = await fetchGraphQLServer({
@@ -20,12 +21,14 @@ export default async function WarehousesPage() {
   console.log('data, error  ', data, error)
   return (
     <div>
-      <div className="flex justify-between">
+      <div className="flex justify-between mb-6">
         <div>Warehouses</div>
         <Link href="/manufacturer/createWarehouse">New</Link>
       </div>
-      Hello warehouses
-      {data?.myWarehouses.length}
+
+      {data?.myWarehouses.map((warehouse) => (
+        <WarehouseCard warehouse={warehouse} key={warehouse.id} />
+      ))}
     </div>
   )
 }

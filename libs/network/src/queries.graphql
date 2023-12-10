@@ -65,6 +65,7 @@ query myWarehouses(
   myWarehouses(skip: $skip, take: $take, orderBy: $orderBy, where: $where) {
     id
     name
+    description
     createdAt
     inventories {
       quantity
