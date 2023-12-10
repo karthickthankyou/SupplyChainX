@@ -52,6 +52,96 @@ export class InventoriesResolver {
     })
   }
 
+  @AllowAuthenticated()
+  @Mutation(() => Inventory)
+  async reduceInventory(
+    @Args('warehouseId') warehouseId: number,
+    @Args('productId') productId: number,
+    @Args('quantity') quantity: number,
+    @GetUser() user: GetUserType,
+  ): Promise<Inventory | null> {
+    await this.inventoriesService.checkWarehouseOwner({
+      uid: user.uid,
+      warehouseId,
+    })
+
+    const inventory = await this.prisma.inventory.findFirst({
+      where: { productId, warehouseId },
+    })
+    return this.prisma.inventory.update({
+      where: { id: inventory.id },
+      data: { quantity: { decrement: quantity } },
+    })
+  }
+
+  @AllowAuthenticated()
+  @Mutation(() => Inventory)
+  async transferInventory(
+    @Args('fromWarehouseId') fromWarehouseId: number,
+    @Args('toWarehouseId') toWarehouseId: number,
+    @Args('productId') productId: number,
+    @Args('quantity') quantity: number,
+    @GetUser() user: GetUserType,
+  ): Promise<Inventory | null> {
+    return this.prisma.$transaction(async (prisma) => {
+      await this.inventoriesService.checkWarehouseOwner({
+        uid: user.uid,
+        warehouseId: fromWarehouseId,
+      })
+      // 1. Check sender inventory
+      const senderInventory = await prisma.inventory.findFirst({
+        where: { productId, warehouseId: fromWarehouseId },
+      })
+
+      if (!senderInventory) {
+        throw new Error('Sender inventory does not exist')
+      }
+
+      if (senderInventory.quantity < quantity) {
+        throw new Error('Insufficient inventory for transfer')
+      }
+
+      // 2. Update sender inventory
+      await prisma.inventory.update({
+        where: { id: senderInventory.id },
+        data: { quantity: { decrement: quantity } },
+      })
+
+      // 3. Check if receiver inventory exists
+      const receiverInventory = await prisma.inventory.findFirst({
+        where: { productId, warehouseId: toWarehouseId },
+      })
+
+      // 4. Update or create receiver inventory
+      if (receiverInventory) {
+        await prisma.inventory.update({
+          where: { id: receiverInventory.id },
+          data: { quantity: { increment: quantity } },
+        })
+      } else {
+        await prisma.inventory.create({
+          data: {
+            quantity,
+            productId,
+            warehouseId: toWarehouseId,
+          },
+        })
+      }
+
+      await prisma.transaction.create({
+        data: {
+          quantity,
+          fromWarehouseId,
+          toWarehouseId,
+          productId,
+        },
+      })
+
+      // 5. Return sender inventory after successful transfer
+      return senderInventory
+    })
+  }
+
   @Query(() => Inventory, { name: 'inventory' })
   findOne(@Args() args: FindUniqueInventoryArgs) {
     return this.inventoriesService.findOne(args)

@@ -18,7 +18,6 @@ export default async function WarehousesPage() {
     },
   })
 
-  console.log('data, error  ', data, error)
   return (
     <div>
       <div className="flex justify-between mb-6">
@@ -27,7 +26,11 @@ export default async function WarehousesPage() {
       </div>
 
       {data?.myWarehouses.map((warehouse) => (
-        <WarehouseCard warehouse={warehouse} key={warehouse.id} />
+        <WarehouseCard
+          warehouse={warehouse}
+          key={warehouse.id}
+          showUpsertInventory
+        />
       ))}
     </div>
   )

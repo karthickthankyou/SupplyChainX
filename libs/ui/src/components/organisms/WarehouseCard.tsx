@@ -3,12 +3,17 @@ import { Description } from '../atoms/typography'
 import { format } from 'date-fns'
 import { UpsertInventory } from './UpsertInventory'
 import Image from 'next/image'
+import { TransferGoods } from './TransferGoods'
 
 type WarehouseProps = {
   warehouse: MyWarehousesQuery['myWarehouses'][0]
+  showUpsertInventory?: boolean
 }
 
-export const WarehouseCard = ({ warehouse }: WarehouseProps) => {
+export const WarehouseCard = ({
+  warehouse,
+  showUpsertInventory = false,
+}: WarehouseProps) => {
   return (
     <div className="warehouse-card">
       <div className="text-xl font-semibold">{warehouse.name}</div>
@@ -18,7 +23,7 @@ export const WarehouseCard = ({ warehouse }: WarehouseProps) => {
       </p>
       <div className="flex items-center gap-2 mt-4 mb-2 ">
         <div className="font-semibold">Inventory</div>
-        <UpsertInventory warehouse={warehouse} />
+        {showUpsertInventory ? <UpsertInventory warehouse={warehouse} /> : null}
       </div>
       {warehouse.inventories.length === 0 ? <div>Empty.</div> : null}
       <ul className="grid grid-cols-4 gap-4">
@@ -37,6 +42,7 @@ export const WarehouseCard = ({ warehouse }: WarehouseProps) => {
             <div className="h-full p-2 bg-white">
               <div className="text-xs">{inventory.product.name}</div>
               <div className="text-xl">{inventory.quantity}</div>
+              <TransferGoods warehouseId={warehouse.id} inventory={inventory} />
             </div>
           </li>
         ))}

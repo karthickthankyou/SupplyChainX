@@ -52,6 +52,28 @@ export class InventoriesService {
     })
   }
 
+  async checkWarehouseOwner({
+    uid,
+    warehouseId,
+  }: {
+    uid: string
+    warehouseId: number
+  }) {
+    const warehouse = await this.prisma.warehouse.findUnique({
+      where: { id: warehouseId },
+    })
+
+    if (
+      ![
+        warehouse.distributorId,
+        warehouse.manufacturerId,
+        warehouse.retailerId,
+      ].includes(uid)
+    ) {
+      throw new Error('Warehouse does not belong to you')
+    }
+  }
+
   remove(args: FindUniqueInventoryArgs) {
     return this.prisma.inventory.delete(args)
   }

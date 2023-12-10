@@ -39,3 +39,10 @@ export const formSchemaUpsertInventory = z.object({
   productId: z.number(),
   quantity: z.number(),
 })
+
+export const formSchemaTransferInventory = z.object({
+  productId: z.number(),
+  quantity: z.number(),
+  fromWarehouseId: z.number(),
+  toWarehouseId: z.number(),
+})

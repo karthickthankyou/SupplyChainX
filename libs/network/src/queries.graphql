@@ -93,6 +93,7 @@ query myWarehouses(
       product {
         name
         image
+        id
       }
     }
   }
@@ -140,5 +141,35 @@ mutation createDistributor($createDistributorInput: CreateDistributorInput!) {
 mutation createRetailer($createRetailerInput: CreateRetailerInput!) {
   createRetailer(createRetailerInput: $createRetailerInput) {
     uid
+  }
+}
+
+mutation transferInventory(
+  $fromWarehouseId: Int!
+  $toWarehouseId: Int!
+  $productId: Int!
+  $quantity: Int!
+) {
+  transferInventory(
+    fromWarehouseId: $fromWarehouseId
+    toWarehouseId: $toWarehouseId
+    productId: $productId
+    quantity: $quantity
+  ) {
+    id
+  }
+}
+
+mutation reduceInventory(
+  $warehouseId: Int!
+  $productId: Int!
+  $quantity: Int!
+) {
+  reduceInventory(
+    warehouseId: $warehouseId
+    productId: $productId
+    quantity: $quantity
+  ) {
+    id
   }
 }

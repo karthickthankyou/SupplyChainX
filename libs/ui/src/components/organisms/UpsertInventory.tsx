@@ -34,7 +34,6 @@ export const UpsertInventory = ({
       }
     >
       {warehouse.name}
-
       <form
         onSubmit={handleSubmit(async ({ productId, quantity, warehouseId }) => {
           console.log('data', productId, quantity, warehouseId)
