@@ -20,6 +20,7 @@ export class ProductWhereInputStrict
   implements
     RestrictProperties<ProductWhereInputStrict, Prisma.ProductWhereInput>
 {
+  image: StringFilter
   id: IntFilter
   name: StringFilter
   description: StringFilter

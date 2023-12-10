@@ -7,9 +7,12 @@ import { UpdateProductInput } from './dtos/update-product.input'
 @Injectable()
 export class ProductsService {
   constructor(private readonly prisma: PrismaService) {}
-  create(createProductInput: CreateProductInput) {
+  create({ manufacturerId, ...createProductInput }: CreateProductInput) {
     return this.prisma.product.create({
-      data: createProductInput,
+      data: {
+        ...createProductInput,
+        manufacturer: { connect: { uid: manufacturerId } },
+      },
     })
   }
 

@@ -24,3 +24,9 @@ export const formSchemaCreateWarehouse = z.object({
   description: z.string().optional(),
   address: addressSchema,
 })
+
+export const formSchemaCreateProduct = z.object({
+  name: z.string(),
+  description: z.string().optional(),
+  image: z.any().optional(),
+})

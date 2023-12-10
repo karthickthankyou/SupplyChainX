@@ -43,9 +43,10 @@ type Manufacturer {
 }
 
 type Product {
+  image: String
+  description: String
   id: Int!
   name: String!
-  description: String!
   createdAt: DateTime!
   updatedAt: DateTime!
   manufacturerId: String!
@@ -225,6 +226,7 @@ input ProductListRelationFilter {
 }
 
 input ProductWhereInput {
+  image: StringFilter
   id: IntFilter
   name: StringFilter
   description: StringFilter
@@ -463,12 +465,14 @@ enum ProductScalarFieldEnum {
   id
   name
   description
+  image
   createdAt
   updatedAt
   manufacturerId
 }
 
 input ProductOrderByWithRelationInput {
+  image: SortOrder
   id: SortOrder
   name: SortOrder
   description: SortOrder
@@ -673,14 +677,16 @@ input UpdateRetailerInput {
 }
 
 input CreateProductInput {
+  image: String
+  description: String
   name: String!
-  description: String!
   manufacturerId: String!
 }
 
 input UpdateProductInput {
-  name: String
+  image: String
   description: String
+  name: String
   manufacturerId: String
   id: Int!
 }

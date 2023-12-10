@@ -85,6 +85,7 @@ query myProducts(
   myProducts(skip: $skip, take: $take, orderBy: $orderBy, where: $where) {
     id
     name
+    image
     createdAt
     description
   }
@@ -92,6 +93,12 @@ query myProducts(
 
 mutation createWarehouse($createWarehouseInput: CreateWarehouseInput!) {
   createWarehouse(createWarehouseInput: $createWarehouseInput) {
+    id
+  }
+}
+
+mutation createProduct($createProductInput: CreateProductInput!) {
+  createProduct(createProductInput: $createProductInput) {
     id
   }
 }

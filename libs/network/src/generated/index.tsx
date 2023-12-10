@@ -69,7 +69,8 @@ export type CreateManufacturerInput = {
 }
 
 export type CreateProductInput = {
-  description: Scalars['String']['input']
+  description?: InputMaybe<Scalars['String']['input']>
+  image?: InputMaybe<Scalars['String']['input']>
   manufacturerId: Scalars['String']['input']
   name: Scalars['String']['input']
 }
@@ -478,8 +479,9 @@ export type MutationUpdateWarehouseArgs = {
 export type Product = {
   __typename?: 'Product'
   createdAt: Scalars['DateTime']['output']
-  description: Scalars['String']['output']
+  description?: Maybe<Scalars['String']['output']>
   id: Scalars['Int']['output']
+  image?: Maybe<Scalars['String']['output']>
   inventories: Array<Inventory>
   manufacturer: Manufacturer
   manufacturerId: Scalars['String']['output']
@@ -502,6 +504,7 @@ export type ProductOrderByWithRelationInput = {
   createdAt?: InputMaybe<SortOrder>
   description?: InputMaybe<SortOrder>
   id?: InputMaybe<SortOrder>
+  image?: InputMaybe<SortOrder>
   inventories?: InputMaybe<InventoryOrderByRelationAggregateInput>
   manufacturer?: InputMaybe<ManufacturerOrderByWithRelationInput>
   manufacturerId?: InputMaybe<SortOrder>
@@ -519,6 +522,7 @@ export enum ProductScalarFieldEnum {
   CreatedAt = 'createdAt',
   Description = 'description',
   Id = 'id',
+  Image = 'image',
   ManufacturerId = 'manufacturerId',
   Name = 'name',
   UpdatedAt = 'updatedAt',
@@ -531,6 +535,7 @@ export type ProductWhereInput = {
   createdAt?: InputMaybe<DateTimeFilter>
   description?: InputMaybe<StringFilter>
   id?: InputMaybe<IntFilter>
+  image?: InputMaybe<StringFilter>
   inventories?: InputMaybe<InventoryListRelationFilter>
   manufacturer?: InputMaybe<ManufacturerRelationFilter>
   manufacturerId?: InputMaybe<StringFilter>
@@ -870,6 +875,7 @@ export type UpdateManufacturerInput = {
 export type UpdateProductInput = {
   description?: InputMaybe<Scalars['String']['input']>
   id: Scalars['Int']['input']
+  image?: InputMaybe<Scalars['String']['input']>
   manufacturerId?: InputMaybe<Scalars['String']['input']>
   name?: InputMaybe<Scalars['String']['input']>
 }
@@ -1151,8 +1157,9 @@ export type MyProductsQuery = {
     __typename?: 'Product'
     id: number
     name: string
+    image?: string | null
     createdAt: any
-    description: string
+    description?: string | null
   }>
 }
 
@@ -1163,6 +1170,15 @@ export type CreateWarehouseMutationVariables = Exact<{
 export type CreateWarehouseMutation = {
   __typename?: 'Mutation'
   createWarehouse: { __typename?: 'Warehouse'; id: number }
+}
+
+export type CreateProductMutationVariables = Exact<{
+  createProductInput: CreateProductInput
+}>
+
+export type CreateProductMutation = {
+  __typename?: 'Mutation'
+  createProduct: { __typename?: 'Product'; id: number }
 }
 
 export const namedOperations = {
@@ -1178,6 +1194,7 @@ export const namedOperations = {
     CreateUserWithProvider: 'CreateUserWithProvider',
     createManufacturer: 'createManufacturer',
     createWarehouse: 'createWarehouse',
+    createProduct: 'createProduct',
   },
 }
 
@@ -1728,6 +1745,7 @@ export const MyProductsDocument = /*#__PURE__*/ {
               selections: [
                 { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'image' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'description' } },
               ],
@@ -1791,4 +1809,58 @@ export const CreateWarehouseDocument = /*#__PURE__*/ {
 } as unknown as DocumentNode<
   CreateWarehouseMutation,
   CreateWarehouseMutationVariables
+>
+export const CreateProductDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'createProduct' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'createProductInput' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'CreateProductInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'createProduct' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'createProductInput' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'createProductInput' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CreateProductMutation,
+  CreateProductMutationVariables
 >
