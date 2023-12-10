@@ -17,6 +17,8 @@ export class WarehouseOrderByWithRelationInputStrict
     >
 {
   @Field(() => Prisma.SortOrder)
+  description: Prisma.SortOrder
+  @Field(() => Prisma.SortOrder)
   id: Prisma.SortOrder
   @Field(() => Prisma.SortOrder)
   createdAt: Prisma.SortOrder

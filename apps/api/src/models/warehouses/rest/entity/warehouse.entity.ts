@@ -5,6 +5,8 @@ import { RestrictProperties } from 'src/common/dtos/common.input'
 export class WarehouseEntity
   implements RestrictProperties<WarehouseEntity, Warehouse>
 {
+  @IsOptional()
+  description: string
   id: number
   createdAt: Date
   updatedAt: Date

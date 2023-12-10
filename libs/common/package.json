@@ -10,8 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@graphql-typed-document-node/core": "^3.2.0",
+    "@foundation/forms": "workspace:^",
     "@foundation/network": "workspace:^",
+    "@graphql-typed-document-node/core": "^3.2.0",
     "bcrypt": "^5.1.1",
     "graphql": "^16.8.1",
     "jsonwebtoken": "^9.0.2",

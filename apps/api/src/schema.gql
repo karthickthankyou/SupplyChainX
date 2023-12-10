@@ -55,6 +55,7 @@ type Product {
 }
 
 type Warehouse {
+  description: String
   manufacturerId: String
   distributorId: String
   retailerId: String
@@ -110,9 +111,9 @@ type Transaction {
 }
 
 type Location {
+  latitude: Float!
+  longitude: Float!
   id: Int!
-  latitude: Int!
-  longitude: Int!
   address: String!
   warehouseId: Int!
   warehouse: Warehouse!
@@ -131,8 +132,10 @@ type Query {
   retailers(distinct: [RetailerScalarFieldEnum!], where: RetailerWhereInput, orderBy: [RetailerOrderByWithRelationInput!], cursor: RetailerWhereUniqueInput, take: Int, skip: Int): [Retailer!]!
   retailer(where: RetailerWhereUniqueInput!): Retailer!
   products(distinct: [ProductScalarFieldEnum!], where: ProductWhereInput, orderBy: [ProductOrderByWithRelationInput!], cursor: ProductWhereUniqueInput, take: Int, skip: Int): [Product!]!
+  myProducts(distinct: [ProductScalarFieldEnum!], where: ProductWhereInput, orderBy: [ProductOrderByWithRelationInput!], cursor: ProductWhereUniqueInput, take: Int, skip: Int): [Product!]!
   product(where: ProductWhereUniqueInput!): Product!
   warehouses(distinct: [WarehouseScalarFieldEnum!], where: WarehouseWhereInput, orderBy: [WarehouseOrderByWithRelationInput!], cursor: WarehouseWhereUniqueInput, take: Int, skip: Int): [Warehouse!]!
+  myWarehouses(distinct: [WarehouseScalarFieldEnum!], where: WarehouseWhereInput, orderBy: [WarehouseOrderByWithRelationInput!], cursor: WarehouseWhereUniqueInput, take: Int, skip: Int): [Warehouse!]!
   warehouse(where: WarehouseWhereUniqueInput!): Warehouse!
   inventories(distinct: [InventoryScalarFieldEnum!], where: InventoryWhereInput, orderBy: [InventoryOrderByWithRelationInput!], cursor: InventoryWhereUniqueInput, take: Int, skip: Int): [Inventory!]!
   inventory(where: InventoryWhereUniqueInput!): Inventory!
@@ -275,6 +278,7 @@ input WarehouseRelationFilter {
 }
 
 input WarehouseWhereInput {
+  description: StringFilter
   id: IntFilter
   createdAt: DateTimeFilter
   updatedAt: DateTimeFilter
@@ -493,12 +497,14 @@ enum WarehouseScalarFieldEnum {
   createdAt
   updatedAt
   name
+  description
   manufacturerId
   distributorId
   retailerId
 }
 
 input WarehouseOrderByWithRelationInput {
+  description: SortOrder
   id: SortOrder
   createdAt: SortOrder
   updatedAt: SortOrder
@@ -680,11 +686,23 @@ input UpdateProductInput {
 }
 
 input CreateWarehouseInput {
+  description: String
   name: String!
+  address: CreateLocationInputWithoutWarehouseId!
+  manufacturerId: String!
+}
+
+input CreateLocationInputWithoutWarehouseId {
+  latitude: Float!
+  longitude: Float!
+  address: String!
 }
 
 input UpdateWarehouseInput {
+  description: String
   name: String
+  address: CreateLocationInputWithoutWarehouseId
+  manufacturerId: String
   id: Int!
 }
 
@@ -717,15 +735,15 @@ input UpdateTransactionInput {
 }
 
 input CreateLocationInput {
-  latitude: Int!
-  longitude: Int!
+  latitude: Float!
+  longitude: Float!
   address: String!
   warehouseId: Int!
 }
 
 input UpdateLocationInput {
-  latitude: Int
-  longitude: Int
+  latitude: Float
+  longitude: Float
   address: String
   warehouseId: Int
   id: Int!

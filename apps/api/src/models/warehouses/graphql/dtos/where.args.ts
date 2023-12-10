@@ -23,6 +23,7 @@ export class WarehouseWhereInputStrict
   implements
     RestrictProperties<WarehouseWhereInputStrict, Prisma.WarehouseWhereInput>
 {
+  description: StringFilter
   id: IntFilter
   createdAt: DateTimeFilter
   updatedAt: DateTimeFilter

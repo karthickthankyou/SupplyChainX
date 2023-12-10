@@ -53,9 +53,15 @@ export type CreateInventoryInput = {
 
 export type CreateLocationInput = {
   address: Scalars['String']['input']
-  latitude: Scalars['Int']['input']
-  longitude: Scalars['Int']['input']
+  latitude: Scalars['Float']['input']
+  longitude: Scalars['Float']['input']
   warehouseId: Scalars['Int']['input']
+}
+
+export type CreateLocationInputWithoutWarehouseId = {
+  address: Scalars['String']['input']
+  latitude: Scalars['Float']['input']
+  longitude: Scalars['Float']['input']
 }
 
 export type CreateManufacturerInput = {
@@ -94,6 +100,9 @@ export type CreateUserWithProviderInput = {
 }
 
 export type CreateWarehouseInput = {
+  address: CreateLocationInputWithoutWarehouseId
+  description?: InputMaybe<Scalars['String']['input']>
+  manufacturerId: Scalars['String']['input']
   name: Scalars['String']['input']
 }
 
@@ -236,8 +245,8 @@ export type Location = {
   __typename?: 'Location'
   address: Scalars['String']['output']
   id: Scalars['Int']['output']
-  latitude: Scalars['Int']['output']
-  longitude: Scalars['Int']['output']
+  latitude: Scalars['Float']['output']
+  longitude: Scalars['Float']['output']
   warehouse: Warehouse
   warehouseId: Scalars['Int']['output']
 }
@@ -547,6 +556,8 @@ export type Query = {
   manufacturer: Manufacturer
   manufacturerMe?: Maybe<Manufacturer>
   manufacturers: Array<Manufacturer>
+  myProducts: Array<Product>
+  myWarehouses: Array<Warehouse>
   product: Product
   products: Array<Product>
   retailer: Retailer
@@ -617,6 +628,24 @@ export type QueryManufacturersArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>
   take?: InputMaybe<Scalars['Int']['input']>
   where?: InputMaybe<ManufacturerWhereInput>
+}
+
+export type QueryMyProductsArgs = {
+  cursor?: InputMaybe<ProductWhereUniqueInput>
+  distinct?: InputMaybe<Array<ProductScalarFieldEnum>>
+  orderBy?: InputMaybe<Array<ProductOrderByWithRelationInput>>
+  skip?: InputMaybe<Scalars['Int']['input']>
+  take?: InputMaybe<Scalars['Int']['input']>
+  where?: InputMaybe<ProductWhereInput>
+}
+
+export type QueryMyWarehousesArgs = {
+  cursor?: InputMaybe<WarehouseWhereUniqueInput>
+  distinct?: InputMaybe<Array<WarehouseScalarFieldEnum>>
+  orderBy?: InputMaybe<Array<WarehouseOrderByWithRelationInput>>
+  skip?: InputMaybe<Scalars['Int']['input']>
+  take?: InputMaybe<Scalars['Int']['input']>
+  where?: InputMaybe<WarehouseWhereInput>
 }
 
 export type QueryProductArgs = {
@@ -829,8 +858,8 @@ export type UpdateInventoryInput = {
 export type UpdateLocationInput = {
   address?: InputMaybe<Scalars['String']['input']>
   id: Scalars['Int']['input']
-  latitude?: InputMaybe<Scalars['Int']['input']>
-  longitude?: InputMaybe<Scalars['Int']['input']>
+  latitude?: InputMaybe<Scalars['Float']['input']>
+  longitude?: InputMaybe<Scalars['Float']['input']>
   warehouseId?: InputMaybe<Scalars['Int']['input']>
 }
 
@@ -864,7 +893,10 @@ export type UpdateUserInput = {
 }
 
 export type UpdateWarehouseInput = {
+  address?: InputMaybe<CreateLocationInputWithoutWarehouseId>
+  description?: InputMaybe<Scalars['String']['input']>
   id: Scalars['Int']['input']
+  manufacturerId?: InputMaybe<Scalars['String']['input']>
   name?: InputMaybe<Scalars['String']['input']>
 }
 
@@ -923,6 +955,7 @@ export type UserWhereUniqueInput = {
 export type Warehouse = {
   __typename?: 'Warehouse'
   createdAt: Scalars['DateTime']['output']
+  description?: Maybe<Scalars['String']['output']>
   distributor?: Maybe<Distributor>
   distributorId?: Maybe<Scalars['String']['output']>
   id: Scalars['Int']['output']
@@ -950,6 +983,7 @@ export type WarehouseOrderByRelationAggregateInput = {
 
 export type WarehouseOrderByWithRelationInput = {
   createdAt?: InputMaybe<SortOrder>
+  description?: InputMaybe<SortOrder>
   distributor?: InputMaybe<DistributorOrderByWithRelationInput>
   distributorId?: InputMaybe<SortOrder>
   id?: InputMaybe<SortOrder>
@@ -972,6 +1006,7 @@ export type WarehouseRelationFilter = {
 
 export enum WarehouseScalarFieldEnum {
   CreatedAt = 'createdAt',
+  Description = 'description',
   DistributorId = 'distributorId',
   Id = 'id',
   ManufacturerId = 'manufacturerId',
@@ -985,6 +1020,7 @@ export type WarehouseWhereInput = {
   NOT?: InputMaybe<Array<WarehouseWhereInput>>
   OR?: InputMaybe<Array<WarehouseWhereInput>>
   createdAt?: InputMaybe<DateTimeFilter>
+  description?: InputMaybe<StringFilter>
   distributor?: InputMaybe<DistributorRelationFilter>
   distributorId?: InputMaybe<StringFilter>
   id?: InputMaybe<IntFilter>
@@ -1075,16 +1111,72 @@ export type CreateManufacturerMutation = {
   createManufacturer: { __typename?: 'Manufacturer'; uid: string }
 }
 
+export type MyWarehousesQueryVariables = Exact<{
+  skip?: InputMaybe<Scalars['Int']['input']>
+  take?: InputMaybe<Scalars['Int']['input']>
+  orderBy?: InputMaybe<
+    Array<WarehouseOrderByWithRelationInput> | WarehouseOrderByWithRelationInput
+  >
+  where?: InputMaybe<WarehouseWhereInput>
+}>
+
+export type MyWarehousesQuery = {
+  __typename?: 'Query'
+  myWarehouses: Array<{
+    __typename?: 'Warehouse'
+    id: number
+    name: string
+    createdAt: any
+    inventories: Array<{
+      __typename?: 'Inventory'
+      quantity: number
+      product: { __typename?: 'Product'; name: string }
+    }>
+  }>
+}
+
+export type MyProductsQueryVariables = Exact<{
+  skip?: InputMaybe<Scalars['Int']['input']>
+  take?: InputMaybe<Scalars['Int']['input']>
+  orderBy?: InputMaybe<
+    Array<ProductOrderByWithRelationInput> | ProductOrderByWithRelationInput
+  >
+  where?: InputMaybe<ProductWhereInput>
+}>
+
+export type MyProductsQuery = {
+  __typename?: 'Query'
+  myProducts: Array<{
+    __typename?: 'Product'
+    id: number
+    name: string
+    createdAt: any
+    description: string
+  }>
+}
+
+export type CreateWarehouseMutationVariables = Exact<{
+  createWarehouseInput: CreateWarehouseInput
+}>
+
+export type CreateWarehouseMutation = {
+  __typename?: 'Mutation'
+  createWarehouse: { __typename?: 'Warehouse'; id: number }
+}
+
 export const namedOperations = {
   Query: {
     getCredentials: 'getCredentials',
     GetAuthProvider: 'GetAuthProvider',
     manufacturerMe: 'manufacturerMe',
+    myWarehouses: 'myWarehouses',
+    myProducts: 'myProducts',
   },
   Mutation: {
     createUserWithCredentials: 'createUserWithCredentials',
     CreateUserWithProvider: 'CreateUserWithProvider',
     createManufacturer: 'createManufacturer',
+    createWarehouse: 'createWarehouse',
   },
 }
 
@@ -1408,4 +1500,293 @@ export const CreateManufacturerDocument = /*#__PURE__*/ {
 } as unknown as DocumentNode<
   CreateManufacturerMutation,
   CreateManufacturerMutationVariables
+>
+export const MyWarehousesDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'myWarehouses' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'skip' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'take' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'orderBy' },
+          },
+          type: {
+            kind: 'ListType',
+            type: {
+              kind: 'NonNullType',
+              type: {
+                kind: 'NamedType',
+                name: {
+                  kind: 'Name',
+                  value: 'WarehouseOrderByWithRelationInput',
+                },
+              },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'where' },
+          },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'WarehouseWhereInput' },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'myWarehouses' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'skip' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'skip' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'take' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'take' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'orderBy' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'orderBy' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'where' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'where' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'inventories' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'quantity' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'product' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'name' },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<MyWarehousesQuery, MyWarehousesQueryVariables>
+export const MyProductsDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'myProducts' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'skip' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'take' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'orderBy' },
+          },
+          type: {
+            kind: 'ListType',
+            type: {
+              kind: 'NonNullType',
+              type: {
+                kind: 'NamedType',
+                name: {
+                  kind: 'Name',
+                  value: 'ProductOrderByWithRelationInput',
+                },
+              },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'where' },
+          },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'ProductWhereInput' },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'myProducts' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'skip' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'skip' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'take' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'take' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'orderBy' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'orderBy' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'where' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'where' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<MyProductsQuery, MyProductsQueryVariables>
+export const CreateWarehouseDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'createWarehouse' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'createWarehouseInput' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'CreateWarehouseInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'createWarehouse' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'createWarehouseInput' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'createWarehouseInput' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CreateWarehouseMutation,
+  CreateWarehouseMutationVariables
 >

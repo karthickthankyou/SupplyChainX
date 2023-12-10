@@ -82,10 +82,11 @@ model Product {
 model Warehouse {
     id Int @id @default(autoincrement())
 
-    createdAt DateTime  @default(now())
-    updatedAt DateTime  @updatedAt
-    name      String
-    location  Location?
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+    name        String
+    description String?
+    location    Location?
 
     manufacturerId String?
     manufacturer   Manufacturer? @relation(fields: [manufacturerId], references: [uid])

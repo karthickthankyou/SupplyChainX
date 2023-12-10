@@ -10,13 +10,14 @@ const CustomLinkComponent: ForwardRefRenderFunction<
   HTMLAnchorElement,
   Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, keyof LinkProps> &
     LinkProps
-> = ({ children, href, className, ...props }) => {
+> = ({ children, href, className, ...props }, ref) => {
   const pathname = usePathname()
   const active = pathname === href
 
   return (
     <NextLink
       href={href}
+      ref={ref}
       className={cn(
         active ? 'font-semibold text-primary' : '',
         'flex gap-1 transition-all relative',

@@ -10,9 +10,16 @@ import { UpdateWarehouseInput } from './dtos/update-warehouse.input'
 @Injectable()
 export class WarehousesService {
   constructor(private readonly prisma: PrismaService) {}
-  create(createWarehouseInput: CreateWarehouseInput) {
+  create({ address, description, name, manufacturerId }: CreateWarehouseInput) {
     return this.prisma.warehouse.create({
-      data: createWarehouseInput,
+      data: {
+        name,
+        description,
+        location: { create: address },
+        manufacturer: {
+          connect: { uid: manufacturerId },
+        },
+      },
     })
   }
 

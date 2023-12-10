@@ -21,6 +21,8 @@ import { Retailer } from 'src/models/retailers/graphql/entity/retailer.entity'
 import { Inventory } from 'src/models/inventories/graphql/entity/inventory.entity'
 import { Transaction } from 'src/models/transactions/graphql/entity/transaction.entity'
 import { Location } from 'src/models/locations/graphql/entity/location.entity'
+import { AllowAuthenticated, GetUser } from 'src/common/auth/auth.decorator'
+import { GetUserType } from 'src/common/util/types'
 
 @Resolver(() => Warehouse)
 export class WarehousesResolver {
@@ -37,6 +39,19 @@ export class WarehousesResolver {
   @Query(() => [Warehouse], { name: 'warehouses' })
   findAll(@Args() args: FindManyWarehouseArgs) {
     return this.warehousesService.findAll(args)
+  }
+
+  @AllowAuthenticated()
+  @Query(() => [Warehouse], { name: 'myWarehouses' })
+  myWarehouses(
+    @Args() args: FindManyWarehouseArgs,
+    @GetUser() user: GetUserType,
+  ) {
+    console.log('user ', user)
+    return this.warehousesService.findAll({
+      ...args,
+      where: { ...args.where, manufacturerId: { equals: user.uid } },
+    })
   }
 
   @Query(() => Warehouse, { name: 'warehouse' })

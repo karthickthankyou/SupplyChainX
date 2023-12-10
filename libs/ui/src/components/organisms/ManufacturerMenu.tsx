@@ -2,7 +2,6 @@ import { ManufacturerMeQuery } from '@foundation/network/src/generated'
 import Image from 'next/image'
 import { Link } from '../molecules/CustomLink'
 import { Title2 } from '../atoms/typography'
-import { Separator } from '../atoms/separator'
 
 export const ManufacturerMenu = ({ manufacturerMe }: ManufacturerMeQuery) => {
   return (
@@ -20,16 +19,9 @@ export const ManufacturerMenu = ({ manufacturerMe }: ManufacturerMeQuery) => {
       </div>
 
       <div className="flex flex-col gap-2">
-        <Link href="/employer">Dashboard</Link>
-        <Link href="/employer/searchEmployees">Search employees</Link>
-        <Link href="/employer/employees">Employees</Link>
-        <Separator />
-        <Separator />
-        <Link href="/employer/jobs">Jobs</Link>
-        <Link href="/employer/applications">Applications</Link>
-        <Link href="/employer/employers">Manage employers</Link>
-        <Link href="/employer/payments">Payments</Link>
-        <Link href="/employer/following">Following</Link>
+        <Link href="/manufacturer">Dashboard</Link>
+        <Link href="/manufacturer/warehouses">Manage Warehouses</Link>
+        <Link href="/manufacturer/products">Manage Products</Link>
       </div>
     </div>
   )

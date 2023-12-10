@@ -4,6 +4,8 @@ import { RestrictProperties } from 'src/common/dtos/common.input'
 
 @ObjectType()
 export class Warehouse implements RestrictProperties<Warehouse, WarehouseType> {
+  @Field({ nullable: true })
+  description: string
   id: number
   createdAt: Date
   updatedAt: Date

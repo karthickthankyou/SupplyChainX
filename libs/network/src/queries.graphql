@@ -55,3 +55,42 @@ mutation createManufacturer(
     uid
   }
 }
+
+query myWarehouses(
+  $skip: Int
+  $take: Int
+  $orderBy: [WarehouseOrderByWithRelationInput!]
+  $where: WarehouseWhereInput
+) {
+  myWarehouses(skip: $skip, take: $take, orderBy: $orderBy, where: $where) {
+    id
+    name
+    createdAt
+    inventories {
+      quantity
+      product {
+        name
+      }
+    }
+  }
+}
+
+query myProducts(
+  $skip: Int
+  $take: Int
+  $orderBy: [ProductOrderByWithRelationInput!]
+  $where: ProductWhereInput
+) {
+  myProducts(skip: $skip, take: $take, orderBy: $orderBy, where: $where) {
+    id
+    name
+    createdAt
+    description
+  }
+}
+
+mutation createWarehouse($createWarehouseInput: CreateWarehouseInput!) {
+  createWarehouse(createWarehouseInput: $createWarehouseInput) {
+    id
+  }
+}
