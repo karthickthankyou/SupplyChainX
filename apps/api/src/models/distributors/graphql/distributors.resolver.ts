@@ -17,6 +17,8 @@ import { UpdateDistributorInput } from './dtos/update-distributor.input'
 import { PrismaService } from 'src/common/prisma/prisma.service'
 import { User } from 'src/models/users/entity/user.entity'
 import { Warehouse } from 'src/models/warehouses/graphql/entity/warehouse.entity'
+import { AllowAuthenticated, GetUser } from 'src/common/auth/auth.decorator'
+import { GetUserType } from 'src/common/util/types'
 
 @Resolver(() => Distributor)
 export class DistributorsResolver {
@@ -40,6 +42,14 @@ export class DistributorsResolver {
   @Query(() => Distributor, { name: 'distributor' })
   findOne(@Args() args: FindUniqueDistributorArgs) {
     return this.distributorsService.findOne(args)
+  }
+
+  @AllowAuthenticated()
+  @Query(() => Distributor, { name: 'distributorMe', nullable: true })
+  distributorMe(@GetUser() user: GetUserType) {
+    return this.distributorsService.findOne({
+      where: { uid: user.uid },
+    })
   }
 
   @Mutation(() => Distributor)

@@ -20,7 +20,7 @@ export const WarehouseCard = ({ warehouse }: WarehouseProps) => {
         <div className="font-semibold">Inventory</div>
         <UpsertInventory warehouse={warehouse} />
       </div>
-
+      {warehouse.inventories.length === 0 ? <div>Empty.</div> : null}
       <ul className="grid grid-cols-4 gap-4">
         {warehouse.inventories.map((inventory) => (
           <li

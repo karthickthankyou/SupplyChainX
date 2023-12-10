@@ -5,9 +5,8 @@ import { CreateLocationInputWithoutWarehouseId } from 'src/models/locations/grap
 @InputType()
 export class CreateWarehouseInput extends PickType(
   Warehouse,
-  ['name', 'description'],
+  ['name', 'description', 'manufacturerId', 'distributorId', 'retailerId'],
   InputType,
 ) {
   address: CreateLocationInputWithoutWarehouseId
-  manufacturerId: string
 }

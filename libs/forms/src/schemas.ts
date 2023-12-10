@@ -22,6 +22,9 @@ export const addressSchema = z.object({
 export const formSchemaCreateWarehouse = z.object({
   name: z.string(),
   description: z.string().optional(),
+  manufacturerId: z.string().optional(),
+  distributorId: z.string().optional(),
+  retailerId: z.string().optional(),
   address: addressSchema,
 })
 

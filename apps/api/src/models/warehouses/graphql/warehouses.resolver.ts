@@ -47,10 +47,22 @@ export class WarehousesResolver {
     @Args() args: FindManyWarehouseArgs,
     @GetUser() user: GetUserType,
   ) {
-    console.log('user ', user)
     return this.warehousesService.findAll({
       ...args,
-      where: { ...args.where, manufacturerId: { equals: user.uid } },
+      where: {
+        ...args.where,
+        OR: [
+          {
+            manufacturerId: { equals: user.uid },
+          },
+          {
+            distributorId: { equals: user.uid },
+          },
+          {
+            retailerId: { equals: user.uid },
+          },
+        ],
+      },
     })
   }
 

@@ -37,6 +37,27 @@ query GetAuthProvider($uid: String!) {
   }
 }
 
+query distributorMe {
+  distributorMe {
+    uid
+    createdAt
+    user {
+      image
+      name
+    }
+  }
+}
+query retailerMe {
+  retailerMe {
+    uid
+    createdAt
+    user {
+      image
+      name
+    }
+  }
+}
+
 query manufacturerMe {
   manufacturerMe {
     uid
@@ -107,5 +128,17 @@ mutation createProduct($createProductInput: CreateProductInput!) {
 mutation createInventory($createInventoryInput: CreateInventoryInput!) {
   createInventory(createInventoryInput: $createInventoryInput) {
     id
+  }
+}
+
+mutation createDistributor($createDistributorInput: CreateDistributorInput!) {
+  createDistributor(createDistributorInput: $createDistributorInput) {
+    uid
+  }
+}
+
+mutation createRetailer($createRetailerInput: CreateRetailerInput!) {
+  createRetailer(createRetailerInput: $createRetailerInput) {
+    uid
   }
 }

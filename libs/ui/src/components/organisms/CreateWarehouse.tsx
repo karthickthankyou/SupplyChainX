@@ -21,21 +21,45 @@ import { SearchPlace } from '../molecules/ComboBox'
 import { Textarea } from '../atoms/textArea'
 import { SubmitButton } from '../molecules/SubmitButton'
 
-export const CreateWarehouse = () => {
+interface ICreateWarehouse {
+  warehouseRole: {
+    manufacturerId?: string
+    distributorId?: string
+    retailerId?: string
+  }
+  redirectUrl:
+    | '/distributor/warehouses'
+    | '/retailer/warehouses'
+    | '/manufacturer/warehouses'
+}
+
+export const CreateWarehouse = ({
+  warehouseRole,
+  redirectUrl,
+}: ICreateWarehouse) => {
   return (
     <FormProviderCreateWarehouse>
-      <CreateWarehouseContent />
+      <CreateWarehouseContent
+        warehouseRole={warehouseRole}
+        redirectUrl={redirectUrl}
+      />
     </FormProviderCreateWarehouse>
   )
 }
-export const CreateWarehouseContent = () => {
+export const CreateWarehouseContent = ({
+  warehouseRole,
+  redirectUrl,
+}: ICreateWarehouse) => {
   const { register, handleSubmit, reset, setValue } =
     useFormContext<FormTypeCreateWarehouse>()
   return (
     <div className="grid grid-cols-2 gap-2">
       <form
         onSubmit={handleSubmit(async ({ name, description, address }) => {
-          await createWarehouse({ name, address, description })
+          await createWarehouse({
+            formData: { name, address, description, ...warehouseRole },
+            redirectUrl,
+          })
           reset()
         })}
         className="space-y-2"

@@ -15,6 +15,8 @@ import { PrismaService } from 'src/common/prisma/prisma.service'
 import { User } from 'src/models/users/entity/user.entity'
 import { Distributor } from 'src/models/distributors/graphql/entity/distributor.entity'
 import { Warehouse } from 'src/models/warehouses/graphql/entity/warehouse.entity'
+import { AllowAuthenticated, GetUser } from 'src/common/auth/auth.decorator'
+import { GetUserType } from 'src/common/util/types'
 
 @Resolver(() => Retailer)
 export class RetailersResolver {
@@ -36,6 +38,14 @@ export class RetailersResolver {
   @Query(() => Retailer, { name: 'retailer' })
   findOne(@Args() args: FindUniqueRetailerArgs) {
     return this.retailersService.findOne(args)
+  }
+
+  @AllowAuthenticated()
+  @Query(() => Distributor, { name: 'retailerMe', nullable: true })
+  retailerMe(@GetUser() user: GetUserType) {
+    return this.retailersService.findOne({
+      where: { uid: user.uid },
+    })
   }
 
   @Mutation(() => Retailer)

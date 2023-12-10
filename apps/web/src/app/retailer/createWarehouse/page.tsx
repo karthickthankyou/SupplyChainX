@@ -6,8 +6,8 @@ export default async function WarehousesPage() {
   const user = await getAuth()
   return (
     <CreateWarehouse
-      redirectUrl="/manufacturer/warehouses"
-      warehouseRole={{ manufacturerId: user?.user?.uid }}
+      redirectUrl="/retailer/warehouses"
+      warehouseRole={{ retailerId: user?.user?.uid }}
     />
   )
 }

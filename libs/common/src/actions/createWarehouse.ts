@@ -14,7 +14,13 @@ import { fetchGraphQLServer } from '../fetch/server'
 
 type FormTypeCreateWarehouse = z.infer<typeof formSchemaCreateWarehouse>
 
-export async function createWarehouse(formData: FormTypeCreateWarehouse) {
+export async function createWarehouse({
+  formData,
+  redirectUrl,
+}: {
+  formData: FormTypeCreateWarehouse
+  redirectUrl: string
+}) {
   const result = formSchemaCreateWarehouse.safeParse(formData)
   const user = await getAuth()
 
@@ -22,7 +28,14 @@ export async function createWarehouse(formData: FormTypeCreateWarehouse) {
     throw new Error('You are not logged in.')
   }
   if (result.success) {
-    const { name, address, description } = result.data
+    const {
+      name,
+      address,
+      description,
+      distributorId,
+      manufacturerId,
+      retailerId,
+    } = result.data
 
     const { data, error } = await fetchGraphQLServer({
       document: CreateWarehouseDocument,
@@ -31,14 +44,16 @@ export async function createWarehouse(formData: FormTypeCreateWarehouse) {
           address,
           name,
           description,
-          manufacturerId: user.user.uid,
+          distributorId,
+          manufacturerId,
+          retailerId,
         },
       },
     })
 
     if (data?.createWarehouse) {
       revalidateTag(namedOperations.Query.myWarehouses)
-      redirect('/manufacturer/warehouses')
+      redirect(redirectUrl)
     }
     if (error) {
       throw new Error('Something went wrong.')

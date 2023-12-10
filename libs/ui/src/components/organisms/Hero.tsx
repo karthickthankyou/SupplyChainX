@@ -18,7 +18,7 @@ export const HeroBanner = () => {
           <HeroLink Icon={Factory} url={'/manufacturer'}>
             Manufacturer
           </HeroLink>
-          <HeroLink Icon={Warehouse} url={'/distributer'}>
+          <HeroLink Icon={Warehouse} url={'/distributor'}>
             Distributer
           </HeroLink>
           <HeroLink Icon={Store} url={'/retailer'}>

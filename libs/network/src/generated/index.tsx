@@ -103,8 +103,10 @@ export type CreateUserWithProviderInput = {
 export type CreateWarehouseInput = {
   address: CreateLocationInputWithoutWarehouseId
   description?: InputMaybe<Scalars['String']['input']>
-  manufacturerId: Scalars['String']['input']
+  distributorId?: InputMaybe<Scalars['String']['input']>
+  manufacturerId?: InputMaybe<Scalars['String']['input']>
   name: Scalars['String']['input']
+  retailerId?: InputMaybe<Scalars['String']['input']>
 }
 
 export type Credential = {
@@ -551,6 +553,7 @@ export type ProductWhereUniqueInput = {
 export type Query = {
   __typename?: 'Query'
   distributor: Distributor
+  distributorMe?: Maybe<Distributor>
   distributors: Array<Distributor>
   getAuthProvider?: Maybe<AuthProvider>
   getCredentials?: Maybe<User>
@@ -567,6 +570,7 @@ export type Query = {
   product: Product
   products: Array<Product>
   retailer: Retailer
+  retailerMe?: Maybe<Distributor>
   retailers: Array<Retailer>
   transaction: Transaction
   transactions: Array<Transaction>
@@ -911,9 +915,11 @@ export type UpdateUserInput = {
 export type UpdateWarehouseInput = {
   address?: InputMaybe<CreateLocationInputWithoutWarehouseId>
   description?: InputMaybe<Scalars['String']['input']>
+  distributorId?: InputMaybe<Scalars['String']['input']>
   id: Scalars['Int']['input']
   manufacturerId?: InputMaybe<Scalars['String']['input']>
   name?: InputMaybe<Scalars['String']['input']>
+  retailerId?: InputMaybe<Scalars['String']['input']>
 }
 
 export type User = {
@@ -1106,6 +1112,30 @@ export type GetAuthProviderQuery = {
   } | null
 }
 
+export type DistributorMeQueryVariables = Exact<{ [key: string]: never }>
+
+export type DistributorMeQuery = {
+  __typename?: 'Query'
+  distributorMe?: {
+    __typename?: 'Distributor'
+    uid: string
+    createdAt: any
+    user: { __typename?: 'User'; image?: string | null; name: string }
+  } | null
+}
+
+export type RetailerMeQueryVariables = Exact<{ [key: string]: never }>
+
+export type RetailerMeQuery = {
+  __typename?: 'Query'
+  retailerMe?: {
+    __typename?: 'Distributor'
+    uid: string
+    createdAt: any
+    user: { __typename?: 'User'; image?: string | null; name: string }
+  } | null
+}
+
 export type ManufacturerMeQueryVariables = Exact<{ [key: string]: never }>
 
 export type ManufacturerMeQuery = {
@@ -1200,10 +1230,30 @@ export type CreateInventoryMutation = {
   createInventory: { __typename?: 'Inventory'; id: number }
 }
 
+export type CreateDistributorMutationVariables = Exact<{
+  createDistributorInput: CreateDistributorInput
+}>
+
+export type CreateDistributorMutation = {
+  __typename?: 'Mutation'
+  createDistributor: { __typename?: 'Distributor'; uid: string }
+}
+
+export type CreateRetailerMutationVariables = Exact<{
+  createRetailerInput: CreateRetailerInput
+}>
+
+export type CreateRetailerMutation = {
+  __typename?: 'Mutation'
+  createRetailer: { __typename?: 'Retailer'; uid: string }
+}
+
 export const namedOperations = {
   Query: {
     getCredentials: 'getCredentials',
     GetAuthProvider: 'GetAuthProvider',
+    distributorMe: 'distributorMe',
+    retailerMe: 'retailerMe',
     manufacturerMe: 'manufacturerMe',
     myWarehouses: 'myWarehouses',
     myProducts: 'myProducts',
@@ -1215,6 +1265,8 @@ export const namedOperations = {
     createWarehouse: 'createWarehouse',
     createProduct: 'createProduct',
     createInventory: 'createInventory',
+    createDistributor: 'createDistributor',
+    createRetailer: 'createRetailer',
   },
 }
 
@@ -1448,6 +1500,80 @@ export const GetAuthProviderDocument = /*#__PURE__*/ {
   GetAuthProviderQuery,
   GetAuthProviderQueryVariables
 >
+export const DistributorMeDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'distributorMe' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'distributorMe' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'uid' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'user' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'image' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<DistributorMeQuery, DistributorMeQueryVariables>
+export const RetailerMeDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'retailerMe' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'retailerMe' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'uid' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'user' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'image' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<RetailerMeQuery, RetailerMeQueryVariables>
 export const ManufacturerMeDocument = /*#__PURE__*/ {
   kind: 'Document',
   definitions: [
@@ -1941,4 +2067,112 @@ export const CreateInventoryDocument = /*#__PURE__*/ {
 } as unknown as DocumentNode<
   CreateInventoryMutation,
   CreateInventoryMutationVariables
+>
+export const CreateDistributorDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'createDistributor' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'createDistributorInput' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'CreateDistributorInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'createDistributor' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'createDistributorInput' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'createDistributorInput' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'uid' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CreateDistributorMutation,
+  CreateDistributorMutationVariables
+>
+export const CreateRetailerDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'createRetailer' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'createRetailerInput' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'CreateRetailerInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'createRetailer' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'createRetailerInput' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'createRetailerInput' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'uid' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CreateRetailerMutation,
+  CreateRetailerMutationVariables
 >
