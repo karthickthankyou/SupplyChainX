@@ -41,8 +41,42 @@ export enum AuthProviderType {
   Google = 'GOOGLE',
 }
 
-export type CreateItemInput = {
+export type CreateDistributorInput = {
+  uid: Scalars['String']['input']
+}
+
+export type CreateInventoryInput = {
+  productId: Scalars['Int']['input']
+  quantity: Scalars['Int']['input']
+  warehouseId: Scalars['Int']['input']
+}
+
+export type CreateLocationInput = {
+  address: Scalars['String']['input']
+  latitude: Scalars['Int']['input']
+  longitude: Scalars['Int']['input']
+  warehouseId: Scalars['Int']['input']
+}
+
+export type CreateManufacturerInput = {
+  uid: Scalars['String']['input']
+}
+
+export type CreateProductInput = {
+  description: Scalars['String']['input']
+  manufacturerId: Scalars['String']['input']
   name: Scalars['String']['input']
+}
+
+export type CreateRetailerInput = {
+  uid: Scalars['String']['input']
+}
+
+export type CreateTransactionInput = {
+  fromWarehouseId: Scalars['Int']['input']
+  productId: Scalars['Int']['input']
+  quantity: Scalars['Int']['input']
+  toWarehouseId: Scalars['Int']['input']
 }
 
 export type CreateUserWithCredentialsInput = {
@@ -57,6 +91,10 @@ export type CreateUserWithProviderInput = {
   name: Scalars['String']['input']
   type: AuthProviderType
   uid: Scalars['String']['input']
+}
+
+export type CreateWarehouseInput = {
+  name: Scalars['String']['input']
 }
 
 export type Credential = {
@@ -78,6 +116,54 @@ export type DateTimeFilter = {
   notIn?: InputMaybe<Array<Scalars['String']['input']>>
 }
 
+export type Distributor = {
+  __typename?: 'Distributor'
+  createdAt: Scalars['DateTime']['output']
+  uid: Scalars['String']['output']
+  user: User
+  warehouses: Array<Warehouse>
+}
+
+export type DistributorOrderByWithRelationInput = {
+  createdAt?: InputMaybe<SortOrder>
+  uid?: InputMaybe<SortOrder>
+  user?: InputMaybe<UserOrderByWithRelationInput>
+  warehouses?: InputMaybe<WarehouseOrderByRelationAggregateInput>
+}
+
+export type DistributorRelationFilter = {
+  is?: InputMaybe<DistributorWhereInput>
+  isNot?: InputMaybe<DistributorWhereInput>
+}
+
+export enum DistributorScalarFieldEnum {
+  CreatedAt = 'createdAt',
+  Uid = 'uid',
+}
+
+export type DistributorWhereInput = {
+  AND?: InputMaybe<Array<DistributorWhereInput>>
+  NOT?: InputMaybe<Array<DistributorWhereInput>>
+  OR?: InputMaybe<Array<DistributorWhereInput>>
+  createdAt?: InputMaybe<DateTimeFilter>
+  uid?: InputMaybe<StringFilter>
+  user?: InputMaybe<UserRelationFilter>
+  warehouses?: InputMaybe<WarehouseListRelationFilter>
+}
+
+export type DistributorWhereUniqueInput = {
+  uid: Scalars['String']['input']
+}
+
+export type FloatFilter = {
+  equals?: InputMaybe<Scalars['Int']['input']>
+  gt?: InputMaybe<Scalars['Int']['input']>
+  gte?: InputMaybe<Scalars['Int']['input']>
+  lt?: InputMaybe<Scalars['Int']['input']>
+  lte?: InputMaybe<Scalars['Int']['input']>
+  not?: InputMaybe<Scalars['Int']['input']>
+}
+
 export type IntFilter = {
   equals?: InputMaybe<Scalars['Int']['input']>
   gt?: InputMaybe<Scalars['Int']['input']>
@@ -86,55 +172,214 @@ export type IntFilter = {
   lte?: InputMaybe<Scalars['Int']['input']>
 }
 
-export type Item = {
-  __typename?: 'Item'
+export type Inventory = {
+  __typename?: 'Inventory'
   createdAt: Scalars['DateTime']['output']
   id: Scalars['Int']['output']
-  name: Scalars['String']['output']
+  product: Product
+  productId: Scalars['Int']['output']
+  quantity: Scalars['Int']['output']
   updatedAt: Scalars['DateTime']['output']
+  warehouse: Warehouse
+  warehouseId: Scalars['Int']['output']
 }
 
-export type ItemOrderByWithRelationInput = {
+export type InventoryListRelationFilter = {
+  every?: InputMaybe<InventoryWhereInput>
+  none?: InputMaybe<InventoryWhereInput>
+  some?: InputMaybe<InventoryWhereInput>
+}
+
+export type InventoryOrderByRelationAggregateInput = {
+  _count?: InputMaybe<SortOrder>
+}
+
+export type InventoryOrderByWithRelationInput = {
   createdAt?: InputMaybe<SortOrder>
   id?: InputMaybe<SortOrder>
-  name?: InputMaybe<SortOrder>
+  product?: InputMaybe<ProductOrderByWithRelationInput>
+  productId?: InputMaybe<SortOrder>
+  quantity?: InputMaybe<SortOrder>
   updatedAt?: InputMaybe<SortOrder>
+  warehouse?: InputMaybe<WarehouseOrderByWithRelationInput>
+  warehouseId?: InputMaybe<SortOrder>
 }
 
-export enum ItemScalarFieldEnum {
+export enum InventoryScalarFieldEnum {
   CreatedAt = 'createdAt',
   Id = 'id',
-  Name = 'name',
+  ProductId = 'productId',
+  Quantity = 'quantity',
   UpdatedAt = 'updatedAt',
+  WarehouseId = 'warehouseId',
 }
 
-export type ItemWhereInput = {
-  AND?: InputMaybe<Array<ItemWhereInput>>
-  NOT?: InputMaybe<Array<ItemWhereInput>>
-  OR?: InputMaybe<Array<ItemWhereInput>>
+export type InventoryWhereInput = {
+  AND?: InputMaybe<Array<InventoryWhereInput>>
+  NOT?: InputMaybe<Array<InventoryWhereInput>>
+  OR?: InputMaybe<Array<InventoryWhereInput>>
   createdAt?: InputMaybe<DateTimeFilter>
   id?: InputMaybe<IntFilter>
-  name?: InputMaybe<StringFilter>
+  product?: InputMaybe<ProductRelationFilter>
+  productId?: InputMaybe<IntFilter>
+  quantity?: InputMaybe<IntFilter>
   updatedAt?: InputMaybe<DateTimeFilter>
+  warehouse?: InputMaybe<WarehouseRelationFilter>
+  warehouseId?: InputMaybe<IntFilter>
 }
 
-export type ItemWhereUniqueInput = {
-  id?: InputMaybe<Scalars['Int']['input']>
+export type InventoryWhereUniqueInput = {
+  id: Scalars['Int']['input']
+}
+
+export type Location = {
+  __typename?: 'Location'
+  address: Scalars['String']['output']
+  id: Scalars['Int']['output']
+  latitude: Scalars['Int']['output']
+  longitude: Scalars['Int']['output']
+  warehouse: Warehouse
+  warehouseId: Scalars['Int']['output']
+}
+
+export type LocationOrderByWithRelationInput = {
+  address?: InputMaybe<SortOrder>
+  id?: InputMaybe<SortOrder>
+  latitude?: InputMaybe<SortOrder>
+  longitude?: InputMaybe<SortOrder>
+  warehouse?: InputMaybe<WarehouseOrderByWithRelationInput>
+  warehouseId?: InputMaybe<SortOrder>
+}
+
+export type LocationRelationFilter = {
+  is?: InputMaybe<LocationWhereInput>
+  isNot?: InputMaybe<LocationWhereInput>
+}
+
+export enum LocationScalarFieldEnum {
+  Address = 'address',
+  Id = 'id',
+  Latitude = 'latitude',
+  Longitude = 'longitude',
+  WarehouseId = 'warehouseId',
+}
+
+export type LocationWhereInput = {
+  AND?: InputMaybe<Array<LocationWhereInput>>
+  NOT?: InputMaybe<Array<LocationWhereInput>>
+  OR?: InputMaybe<Array<LocationWhereInput>>
+  address?: InputMaybe<StringFilter>
+  id?: InputMaybe<IntFilter>
+  latitude?: InputMaybe<FloatFilter>
+  longitude?: InputMaybe<FloatFilter>
+  warehouse?: InputMaybe<WarehouseRelationFilter>
+  warehouseId?: InputMaybe<IntFilter>
+}
+
+export type LocationWhereUniqueInput = {
+  id: Scalars['Int']['input']
+}
+
+export type Manufacturer = {
+  __typename?: 'Manufacturer'
+  createdAt: Scalars['DateTime']['output']
+  products: Array<Product>
+  uid: Scalars['String']['output']
+  user: User
+  warehouses: Array<Warehouse>
+}
+
+export type ManufacturerOrderByWithRelationInput = {
+  createdAt?: InputMaybe<SortOrder>
+  products?: InputMaybe<ProductOrderByRelationAggregateInput>
+  uid?: InputMaybe<SortOrder>
+  user?: InputMaybe<SortOrder>
+  warehouses?: InputMaybe<WarehouseOrderByRelationAggregateInput>
+}
+
+export type ManufacturerRelationFilter = {
+  is?: InputMaybe<ManufacturerWhereInput>
+  isNot?: InputMaybe<ManufacturerWhereInput>
+}
+
+export enum ManufacturerScalarFieldEnum {
+  CreatedAt = 'createdAt',
+  Uid = 'uid',
+}
+
+export type ManufacturerWhereInput = {
+  AND?: InputMaybe<Array<ManufacturerWhereInput>>
+  NOT?: InputMaybe<Array<ManufacturerWhereInput>>
+  OR?: InputMaybe<Array<ManufacturerWhereInput>>
+  createdAt?: InputMaybe<DateTimeFilter>
+  products?: InputMaybe<ProductListRelationFilter>
+  uid?: InputMaybe<StringFilter>
+  user?: InputMaybe<UserRelationFilter>
+  warehouses?: InputMaybe<WarehouseListRelationFilter>
+}
+
+export type ManufacturerWhereUniqueInput = {
+  uid: Scalars['String']['input']
 }
 
 export type Mutation = {
   __typename?: 'Mutation'
-  createItem: Item
+  createDistributor: Distributor
+  createInventory: Inventory
+  createLocation: Location
+  createManufacturer: Manufacturer
+  createProduct: Product
+  createRetailer: Retailer
+  createTransaction: Transaction
   createUserWithCredentials: User
   createUserWithProvider: User
-  removeItem: Item
+  createWarehouse: Warehouse
+  removeDistributor: Distributor
+  removeInventory: Inventory
+  removeLocation: Location
+  removeManufacturer: Manufacturer
+  removeProduct: Product
+  removeRetailer: Retailer
+  removeTransaction: Transaction
   removeUser: User
-  updateItem: Item
+  removeWarehouse: Warehouse
+  updateDistributor: Distributor
+  updateInventory: Inventory
+  updateLocation: Location
+  updateManufacturer: Manufacturer
+  updateProduct: Product
+  updateRetailer: Retailer
+  updateTransaction: Transaction
   updateUser: User
+  updateWarehouse: Warehouse
 }
 
-export type MutationCreateItemArgs = {
-  createItemInput: CreateItemInput
+export type MutationCreateDistributorArgs = {
+  createDistributorInput: CreateDistributorInput
+}
+
+export type MutationCreateInventoryArgs = {
+  createInventoryInput: CreateInventoryInput
+}
+
+export type MutationCreateLocationArgs = {
+  createLocationInput: CreateLocationInput
+}
+
+export type MutationCreateManufacturerArgs = {
+  createManufacturerInput: CreateManufacturerInput
+}
+
+export type MutationCreateProductArgs = {
+  createProductInput: CreateProductInput
+}
+
+export type MutationCreateRetailerArgs = {
+  createRetailerInput: CreateRetailerInput
+}
+
+export type MutationCreateTransactionArgs = {
+  createTransactionInput: CreateTransactionInput
 }
 
 export type MutationCreateUserWithCredentialsArgs = {
@@ -145,30 +390,186 @@ export type MutationCreateUserWithProviderArgs = {
   createUserWithProviderInput: CreateUserWithProviderInput
 }
 
-export type MutationRemoveItemArgs = {
-  where?: InputMaybe<ItemWhereUniqueInput>
+export type MutationCreateWarehouseArgs = {
+  createWarehouseInput: CreateWarehouseInput
+}
+
+export type MutationRemoveDistributorArgs = {
+  where: DistributorWhereUniqueInput
+}
+
+export type MutationRemoveInventoryArgs = {
+  where: InventoryWhereUniqueInput
+}
+
+export type MutationRemoveLocationArgs = {
+  where: LocationWhereUniqueInput
+}
+
+export type MutationRemoveManufacturerArgs = {
+  where: ManufacturerWhereUniqueInput
+}
+
+export type MutationRemoveProductArgs = {
+  where: ProductWhereUniqueInput
+}
+
+export type MutationRemoveRetailerArgs = {
+  where: RetailerWhereUniqueInput
+}
+
+export type MutationRemoveTransactionArgs = {
+  where: TransactionWhereUniqueInput
 }
 
 export type MutationRemoveUserArgs = {
   where?: InputMaybe<UserWhereUniqueInput>
 }
 
-export type MutationUpdateItemArgs = {
-  updateItemInput: UpdateItemInput
+export type MutationRemoveWarehouseArgs = {
+  where: WarehouseWhereUniqueInput
+}
+
+export type MutationUpdateDistributorArgs = {
+  updateDistributorInput: UpdateDistributorInput
+}
+
+export type MutationUpdateInventoryArgs = {
+  updateInventoryInput: UpdateInventoryInput
+}
+
+export type MutationUpdateLocationArgs = {
+  updateLocationInput: UpdateLocationInput
+}
+
+export type MutationUpdateManufacturerArgs = {
+  updateManufacturerInput: UpdateManufacturerInput
+}
+
+export type MutationUpdateProductArgs = {
+  updateProductInput: UpdateProductInput
+}
+
+export type MutationUpdateRetailerArgs = {
+  updateRetailerInput: UpdateRetailerInput
+}
+
+export type MutationUpdateTransactionArgs = {
+  updateTransactionInput: UpdateTransactionInput
 }
 
 export type MutationUpdateUserArgs = {
   updateUserInput: UpdateUserInput
 }
 
+export type MutationUpdateWarehouseArgs = {
+  updateWarehouseInput: UpdateWarehouseInput
+}
+
+export type Product = {
+  __typename?: 'Product'
+  createdAt: Scalars['DateTime']['output']
+  description: Scalars['String']['output']
+  id: Scalars['Int']['output']
+  inventories: Array<Inventory>
+  manufacturer: Manufacturer
+  manufacturerId: Scalars['String']['output']
+  name: Scalars['String']['output']
+  transactions: Array<Transaction>
+  updatedAt: Scalars['DateTime']['output']
+}
+
+export type ProductListRelationFilter = {
+  every?: InputMaybe<ProductWhereInput>
+  none?: InputMaybe<ProductWhereInput>
+  some?: InputMaybe<ProductWhereInput>
+}
+
+export type ProductOrderByRelationAggregateInput = {
+  _count?: InputMaybe<SortOrder>
+}
+
+export type ProductOrderByWithRelationInput = {
+  createdAt?: InputMaybe<SortOrder>
+  description?: InputMaybe<SortOrder>
+  id?: InputMaybe<SortOrder>
+  inventories?: InputMaybe<InventoryOrderByRelationAggregateInput>
+  manufacturer?: InputMaybe<ManufacturerOrderByWithRelationInput>
+  manufacturerId?: InputMaybe<SortOrder>
+  name?: InputMaybe<SortOrder>
+  transactions?: InputMaybe<TransactionOrderByRelationAggregateInput>
+  updatedAt?: InputMaybe<SortOrder>
+}
+
+export type ProductRelationFilter = {
+  is?: InputMaybe<ProductWhereInput>
+  isNot?: InputMaybe<ProductWhereInput>
+}
+
+export enum ProductScalarFieldEnum {
+  CreatedAt = 'createdAt',
+  Description = 'description',
+  Id = 'id',
+  ManufacturerId = 'manufacturerId',
+  Name = 'name',
+  UpdatedAt = 'updatedAt',
+}
+
+export type ProductWhereInput = {
+  AND?: InputMaybe<Array<ProductWhereInput>>
+  NOT?: InputMaybe<Array<ProductWhereInput>>
+  OR?: InputMaybe<Array<ProductWhereInput>>
+  createdAt?: InputMaybe<DateTimeFilter>
+  description?: InputMaybe<StringFilter>
+  id?: InputMaybe<IntFilter>
+  inventories?: InputMaybe<InventoryListRelationFilter>
+  manufacturer?: InputMaybe<ManufacturerRelationFilter>
+  manufacturerId?: InputMaybe<StringFilter>
+  name?: InputMaybe<StringFilter>
+  transactions?: InputMaybe<TransactionListRelationFilter>
+  updatedAt?: InputMaybe<DateTimeFilter>
+}
+
+export type ProductWhereUniqueInput = {
+  id: Scalars['Int']['input']
+}
+
 export type Query = {
   __typename?: 'Query'
+  distributor: Distributor
+  distributors: Array<Distributor>
   getAuthProvider?: Maybe<AuthProvider>
   getCredentials?: Maybe<User>
-  item: Item
-  items: Array<Item>
+  inventories: Array<Inventory>
+  inventory: Inventory
+  location: Location
+  locations: Array<Location>
+  manufacturer: Manufacturer
+  manufacturerMe?: Maybe<Manufacturer>
+  manufacturers: Array<Manufacturer>
+  product: Product
+  products: Array<Product>
+  retailer: Retailer
+  retailers: Array<Retailer>
+  transaction: Transaction
+  transactions: Array<Transaction>
   user: User
   users: Array<User>
+  warehouse: Warehouse
+  warehouses: Array<Warehouse>
+}
+
+export type QueryDistributorArgs = {
+  where: DistributorWhereUniqueInput
+}
+
+export type QueryDistributorsArgs = {
+  cursor?: InputMaybe<DistributorWhereUniqueInput>
+  distinct?: InputMaybe<Array<DistributorScalarFieldEnum>>
+  orderBy?: InputMaybe<Array<DistributorOrderByWithRelationInput>>
+  skip?: InputMaybe<Scalars['Int']['input']>
+  take?: InputMaybe<Scalars['Int']['input']>
+  where?: InputMaybe<DistributorWhereInput>
 }
 
 export type QueryGetAuthProviderArgs = {
@@ -179,17 +580,82 @@ export type QueryGetCredentialsArgs = {
   email: Scalars['String']['input']
 }
 
-export type QueryItemArgs = {
-  where?: InputMaybe<ItemWhereUniqueInput>
-}
-
-export type QueryItemsArgs = {
-  cursor?: InputMaybe<ItemWhereUniqueInput>
-  distinct?: InputMaybe<Array<ItemScalarFieldEnum>>
-  orderBy?: InputMaybe<Array<ItemOrderByWithRelationInput>>
+export type QueryInventoriesArgs = {
+  cursor?: InputMaybe<InventoryWhereUniqueInput>
+  distinct?: InputMaybe<Array<InventoryScalarFieldEnum>>
+  orderBy?: InputMaybe<Array<InventoryOrderByWithRelationInput>>
   skip?: InputMaybe<Scalars['Int']['input']>
   take?: InputMaybe<Scalars['Int']['input']>
-  where?: InputMaybe<ItemWhereInput>
+  where?: InputMaybe<InventoryWhereInput>
+}
+
+export type QueryInventoryArgs = {
+  where: InventoryWhereUniqueInput
+}
+
+export type QueryLocationArgs = {
+  where: LocationWhereUniqueInput
+}
+
+export type QueryLocationsArgs = {
+  cursor?: InputMaybe<LocationWhereUniqueInput>
+  distinct?: InputMaybe<Array<LocationScalarFieldEnum>>
+  orderBy?: InputMaybe<Array<LocationOrderByWithRelationInput>>
+  skip?: InputMaybe<Scalars['Int']['input']>
+  take?: InputMaybe<Scalars['Int']['input']>
+  where?: InputMaybe<LocationWhereInput>
+}
+
+export type QueryManufacturerArgs = {
+  where: ManufacturerWhereUniqueInput
+}
+
+export type QueryManufacturersArgs = {
+  cursor?: InputMaybe<ManufacturerWhereUniqueInput>
+  distinct?: InputMaybe<Array<ManufacturerScalarFieldEnum>>
+  orderBy?: InputMaybe<Array<ManufacturerOrderByWithRelationInput>>
+  skip?: InputMaybe<Scalars['Int']['input']>
+  take?: InputMaybe<Scalars['Int']['input']>
+  where?: InputMaybe<ManufacturerWhereInput>
+}
+
+export type QueryProductArgs = {
+  where: ProductWhereUniqueInput
+}
+
+export type QueryProductsArgs = {
+  cursor?: InputMaybe<ProductWhereUniqueInput>
+  distinct?: InputMaybe<Array<ProductScalarFieldEnum>>
+  orderBy?: InputMaybe<Array<ProductOrderByWithRelationInput>>
+  skip?: InputMaybe<Scalars['Int']['input']>
+  take?: InputMaybe<Scalars['Int']['input']>
+  where?: InputMaybe<ProductWhereInput>
+}
+
+export type QueryRetailerArgs = {
+  where: RetailerWhereUniqueInput
+}
+
+export type QueryRetailersArgs = {
+  cursor?: InputMaybe<RetailerWhereUniqueInput>
+  distinct?: InputMaybe<Array<RetailerScalarFieldEnum>>
+  orderBy?: InputMaybe<Array<RetailerOrderByWithRelationInput>>
+  skip?: InputMaybe<Scalars['Int']['input']>
+  take?: InputMaybe<Scalars['Int']['input']>
+  where?: InputMaybe<RetailerWhereInput>
+}
+
+export type QueryTransactionArgs = {
+  where: TransactionWhereUniqueInput
+}
+
+export type QueryTransactionsArgs = {
+  cursor?: InputMaybe<TransactionWhereUniqueInput>
+  distinct?: InputMaybe<Array<TransactionScalarFieldEnum>>
+  orderBy?: InputMaybe<Array<TransactionOrderByWithRelationInput>>
+  skip?: InputMaybe<Scalars['Int']['input']>
+  take?: InputMaybe<Scalars['Int']['input']>
+  where?: InputMaybe<TransactionWhereInput>
 }
 
 export type QueryUserArgs = {
@@ -205,9 +671,61 @@ export type QueryUsersArgs = {
   where?: InputMaybe<UserWhereInput>
 }
 
+export type QueryWarehouseArgs = {
+  where: WarehouseWhereUniqueInput
+}
+
+export type QueryWarehousesArgs = {
+  cursor?: InputMaybe<WarehouseWhereUniqueInput>
+  distinct?: InputMaybe<Array<WarehouseScalarFieldEnum>>
+  orderBy?: InputMaybe<Array<WarehouseOrderByWithRelationInput>>
+  skip?: InputMaybe<Scalars['Int']['input']>
+  take?: InputMaybe<Scalars['Int']['input']>
+  where?: InputMaybe<WarehouseWhereInput>
+}
+
 export enum QueryMode {
   Default = 'default',
   Insensitive = 'insensitive',
+}
+
+export type Retailer = {
+  __typename?: 'Retailer'
+  createdAt: Scalars['DateTime']['output']
+  uid: Scalars['String']['output']
+  user: User
+  warehouses: Array<Warehouse>
+}
+
+export type RetailerOrderByWithRelationInput = {
+  createdAt?: InputMaybe<SortOrder>
+  uid?: InputMaybe<SortOrder>
+  user?: InputMaybe<UserOrderByWithRelationInput>
+  warehouses?: InputMaybe<WarehouseOrderByRelationAggregateInput>
+}
+
+export type RetailerRelationFilter = {
+  is?: InputMaybe<RetailerWhereInput>
+  isNot?: InputMaybe<RetailerWhereInput>
+}
+
+export enum RetailerScalarFieldEnum {
+  CreatedAt = 'createdAt',
+  Uid = 'uid',
+}
+
+export type RetailerWhereInput = {
+  AND?: InputMaybe<Array<RetailerWhereInput>>
+  NOT?: InputMaybe<Array<RetailerWhereInput>>
+  OR?: InputMaybe<Array<RetailerWhereInput>>
+  createdAt?: InputMaybe<DateTimeFilter>
+  uid?: InputMaybe<StringFilter>
+  user?: InputMaybe<UserRelationFilter>
+  warehouses?: InputMaybe<WarehouseListRelationFilter>
+}
+
+export type RetailerWhereUniqueInput = {
+  uid: Scalars['String']['input']
 }
 
 export enum SortOrder {
@@ -230,15 +748,124 @@ export type StringFilter = {
   startsWith?: InputMaybe<Scalars['String']['input']>
 }
 
-export type UpdateItemInput = {
+export type Transaction = {
+  __typename?: 'Transaction'
+  createdAt: Scalars['DateTime']['output']
+  fromWarehouse: Warehouse
+  fromWarehouseId: Scalars['Int']['output']
+  id: Scalars['Int']['output']
+  product: Product
+  productId: Scalars['Int']['output']
+  quantity: Scalars['Int']['output']
+  toWarehouse: Warehouse
+  toWarehouseId: Scalars['Int']['output']
+  updatedAt: Scalars['DateTime']['output']
+}
+
+export type TransactionListRelationFilter = {
+  every?: InputMaybe<TransactionWhereInput>
+  none?: InputMaybe<TransactionWhereInput>
+  some?: InputMaybe<TransactionWhereInput>
+}
+
+export type TransactionOrderByRelationAggregateInput = {
+  _count?: InputMaybe<SortOrder>
+}
+
+export type TransactionOrderByWithRelationInput = {
+  createdAt?: InputMaybe<SortOrder>
+  fromWarehouse?: InputMaybe<WarehouseOrderByWithRelationInput>
+  fromWarehouseId?: InputMaybe<SortOrder>
+  id?: InputMaybe<SortOrder>
+  product?: InputMaybe<ProductOrderByWithRelationInput>
+  productId?: InputMaybe<SortOrder>
+  quantity?: InputMaybe<SortOrder>
+  toWarehouse?: InputMaybe<WarehouseOrderByWithRelationInput>
+  toWarehouseId?: InputMaybe<SortOrder>
+  updatedAt?: InputMaybe<SortOrder>
+}
+
+export enum TransactionScalarFieldEnum {
+  CreatedAt = 'createdAt',
+  FromWarehouseId = 'fromWarehouseId',
+  Id = 'id',
+  ProductId = 'productId',
+  Quantity = 'quantity',
+  ToWarehouseId = 'toWarehouseId',
+  UpdatedAt = 'updatedAt',
+}
+
+export type TransactionWhereInput = {
+  AND?: InputMaybe<Array<TransactionWhereInput>>
+  NOT?: InputMaybe<Array<TransactionWhereInput>>
+  OR?: InputMaybe<Array<TransactionWhereInput>>
+  createdAt?: InputMaybe<DateTimeFilter>
+  fromWarehouse?: InputMaybe<WarehouseRelationFilter>
+  fromWarehouseId?: InputMaybe<IntFilter>
+  id?: InputMaybe<IntFilter>
+  product?: InputMaybe<ProductRelationFilter>
+  productId?: InputMaybe<IntFilter>
+  quantity?: InputMaybe<IntFilter>
+  toWarehouse?: InputMaybe<WarehouseRelationFilter>
+  toWarehouseId?: InputMaybe<IntFilter>
+  updatedAt?: InputMaybe<DateTimeFilter>
+}
+
+export type TransactionWhereUniqueInput = {
   id: Scalars['Int']['input']
+}
+
+export type UpdateDistributorInput = {
+  uid: Scalars['String']['input']
+}
+
+export type UpdateInventoryInput = {
+  id: Scalars['Int']['input']
+  productId?: InputMaybe<Scalars['Int']['input']>
+  quantity?: InputMaybe<Scalars['Int']['input']>
+  warehouseId?: InputMaybe<Scalars['Int']['input']>
+}
+
+export type UpdateLocationInput = {
+  address?: InputMaybe<Scalars['String']['input']>
+  id: Scalars['Int']['input']
+  latitude?: InputMaybe<Scalars['Int']['input']>
+  longitude?: InputMaybe<Scalars['Int']['input']>
+  warehouseId?: InputMaybe<Scalars['Int']['input']>
+}
+
+export type UpdateManufacturerInput = {
+  uid: Scalars['String']['input']
+}
+
+export type UpdateProductInput = {
+  description?: InputMaybe<Scalars['String']['input']>
+  id: Scalars['Int']['input']
+  manufacturerId?: InputMaybe<Scalars['String']['input']>
   name?: InputMaybe<Scalars['String']['input']>
+}
+
+export type UpdateRetailerInput = {
+  uid: Scalars['String']['input']
+}
+
+export type UpdateTransactionInput = {
+  fromWarehouseId?: InputMaybe<Scalars['Int']['input']>
+  id: Scalars['Int']['input']
+  productId?: InputMaybe<Scalars['Int']['input']>
+  quantity?: InputMaybe<Scalars['Int']['input']>
+  toWarehouseId?: InputMaybe<Scalars['Int']['input']>
 }
 
 export type UpdateUserInput = {
   image?: InputMaybe<Scalars['String']['input']>
   name?: InputMaybe<Scalars['String']['input']>
   uid: Scalars['String']['input']
+}
+
+export type UpdateWarehouseInput = {
+  id: Scalars['Int']['input']
+  name?: InputMaybe<Scalars['String']['input']>
 }
 
 export type User = {
@@ -253,10 +880,18 @@ export type User = {
 
 export type UserOrderByWithRelationInput = {
   createdAt?: InputMaybe<SortOrder>
+  distributor?: InputMaybe<DistributorOrderByWithRelationInput>
   image?: InputMaybe<SortOrder>
+  manufacturer?: InputMaybe<ManufacturerOrderByWithRelationInput>
   name?: InputMaybe<SortOrder>
+  retailer?: InputMaybe<RetailerOrderByWithRelationInput>
   uid?: InputMaybe<SortOrder>
   updatedAt?: InputMaybe<SortOrder>
+}
+
+export type UserRelationFilter = {
+  is?: InputMaybe<UserWhereInput>
+  isNot?: InputMaybe<UserWhereInput>
 }
 
 export enum UserScalarFieldEnum {
@@ -272,14 +907,101 @@ export type UserWhereInput = {
   NOT?: InputMaybe<Array<UserWhereInput>>
   OR?: InputMaybe<Array<UserWhereInput>>
   createdAt?: InputMaybe<DateTimeFilter>
+  distributor?: InputMaybe<DistributorRelationFilter>
   image?: InputMaybe<StringFilter>
+  manufacturer?: InputMaybe<ManufacturerRelationFilter>
   name?: InputMaybe<StringFilter>
+  retailer?: InputMaybe<RetailerRelationFilter>
   uid?: InputMaybe<StringFilter>
   updatedAt?: InputMaybe<DateTimeFilter>
 }
 
 export type UserWhereUniqueInput = {
   uid: Scalars['String']['input']
+}
+
+export type Warehouse = {
+  __typename?: 'Warehouse'
+  createdAt: Scalars['DateTime']['output']
+  distributor?: Maybe<Distributor>
+  distributorId?: Maybe<Scalars['String']['output']>
+  id: Scalars['Int']['output']
+  ins: Array<Transaction>
+  inventories: Array<Inventory>
+  location?: Maybe<Location>
+  manufacturer?: Maybe<Manufacturer>
+  manufacturerId?: Maybe<Scalars['String']['output']>
+  name: Scalars['String']['output']
+  outs: Array<Transaction>
+  retailer?: Maybe<Retailer>
+  retailerId?: Maybe<Scalars['String']['output']>
+  updatedAt: Scalars['DateTime']['output']
+}
+
+export type WarehouseListRelationFilter = {
+  every?: InputMaybe<WarehouseWhereInput>
+  none?: InputMaybe<WarehouseWhereInput>
+  some?: InputMaybe<WarehouseWhereInput>
+}
+
+export type WarehouseOrderByRelationAggregateInput = {
+  _count?: InputMaybe<SortOrder>
+}
+
+export type WarehouseOrderByWithRelationInput = {
+  createdAt?: InputMaybe<SortOrder>
+  distributor?: InputMaybe<DistributorOrderByWithRelationInput>
+  distributorId?: InputMaybe<SortOrder>
+  id?: InputMaybe<SortOrder>
+  ins?: InputMaybe<TransactionOrderByRelationAggregateInput>
+  inventories?: InputMaybe<InventoryOrderByRelationAggregateInput>
+  location?: InputMaybe<LocationOrderByWithRelationInput>
+  manufacturer?: InputMaybe<ManufacturerOrderByWithRelationInput>
+  manufacturerId?: InputMaybe<SortOrder>
+  name?: InputMaybe<SortOrder>
+  outs?: InputMaybe<TransactionOrderByRelationAggregateInput>
+  retailer?: InputMaybe<RetailerOrderByWithRelationInput>
+  retailerId?: InputMaybe<SortOrder>
+  updatedAt?: InputMaybe<SortOrder>
+}
+
+export type WarehouseRelationFilter = {
+  is?: InputMaybe<WarehouseWhereInput>
+  isNot?: InputMaybe<WarehouseWhereInput>
+}
+
+export enum WarehouseScalarFieldEnum {
+  CreatedAt = 'createdAt',
+  DistributorId = 'distributorId',
+  Id = 'id',
+  ManufacturerId = 'manufacturerId',
+  Name = 'name',
+  RetailerId = 'retailerId',
+  UpdatedAt = 'updatedAt',
+}
+
+export type WarehouseWhereInput = {
+  AND?: InputMaybe<Array<WarehouseWhereInput>>
+  NOT?: InputMaybe<Array<WarehouseWhereInput>>
+  OR?: InputMaybe<Array<WarehouseWhereInput>>
+  createdAt?: InputMaybe<DateTimeFilter>
+  distributor?: InputMaybe<DistributorRelationFilter>
+  distributorId?: InputMaybe<StringFilter>
+  id?: InputMaybe<IntFilter>
+  ins?: InputMaybe<TransactionListRelationFilter>
+  inventories?: InputMaybe<InventoryListRelationFilter>
+  location?: InputMaybe<LocationRelationFilter>
+  manufacturer?: InputMaybe<ManufacturerRelationFilter>
+  manufacturerId?: InputMaybe<StringFilter>
+  name?: InputMaybe<StringFilter>
+  outs?: InputMaybe<TransactionListRelationFilter>
+  retailer?: InputMaybe<RetailerRelationFilter>
+  retailerId?: InputMaybe<StringFilter>
+  updatedAt?: InputMaybe<DateTimeFilter>
+}
+
+export type WarehouseWhereUniqueInput = {
+  id: Scalars['Int']['input']
 }
 
 export type CreateUserWithCredentialsMutationVariables = Exact<{
@@ -332,14 +1054,37 @@ export type GetAuthProviderQuery = {
   } | null
 }
 
+export type ManufacturerMeQueryVariables = Exact<{ [key: string]: never }>
+
+export type ManufacturerMeQuery = {
+  __typename?: 'Query'
+  manufacturerMe?: {
+    __typename?: 'Manufacturer'
+    uid: string
+    createdAt: any
+    user: { __typename?: 'User'; image?: string | null; name: string }
+  } | null
+}
+
+export type CreateManufacturerMutationVariables = Exact<{
+  createManufacturerInput: CreateManufacturerInput
+}>
+
+export type CreateManufacturerMutation = {
+  __typename?: 'Mutation'
+  createManufacturer: { __typename?: 'Manufacturer'; uid: string }
+}
+
 export const namedOperations = {
   Query: {
     getCredentials: 'getCredentials',
     GetAuthProvider: 'GetAuthProvider',
+    manufacturerMe: 'manufacturerMe',
   },
   Mutation: {
     createUserWithCredentials: 'createUserWithCredentials',
     CreateUserWithProvider: 'CreateUserWithProvider',
+    createManufacturer: 'createManufacturer',
   },
 }
 
@@ -572,4 +1317,95 @@ export const GetAuthProviderDocument = /*#__PURE__*/ {
 } as unknown as DocumentNode<
   GetAuthProviderQuery,
   GetAuthProviderQueryVariables
+>
+export const ManufacturerMeDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'manufacturerMe' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'manufacturerMe' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'uid' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'user' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'image' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<ManufacturerMeQuery, ManufacturerMeQueryVariables>
+export const CreateManufacturerDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'createManufacturer' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'createManufacturerInput' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'CreateManufacturerInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'createManufacturer' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'createManufacturerInput' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'createManufacturerInput' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'uid' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CreateManufacturerMutation,
+  CreateManufacturerMutationVariables
 >

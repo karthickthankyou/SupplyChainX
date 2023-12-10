@@ -30,11 +30,6 @@ export async function fetchGraphQL<TData, V>({
   config,
   token,
 }: GraphqlRequestOptions<TData, V>): Promise<FetchResult<TData>> {
-  //   const token = await fetch('/api/auth/token').then((res) => res.json())
-  //   console.log('token ', token)
-  //   const getCookies = cookies()
-  //   const token = getCookies.get('next-auth.session-token')?.value || ''
-
   const query = print(document)
 
   return await fetch(process.env.NEXT_PUBLIC_API_URL + '/graphql', {

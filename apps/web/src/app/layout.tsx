@@ -1,5 +1,10 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import {
+  Inter,
+  Merriweather,
+  Merriweather_Sans,
+  Roboto,
+} from 'next/font/google'
 import '@foundation/ui/src/index.css'
 
 import { AuthProvider } from '@foundation/ui/src/components/molecules/authProvider'
@@ -9,7 +14,15 @@ import { Navbar } from '@foundation/ui/src/components/organisms/Navbar'
 import { ThemeProvider } from '@foundation/ui/src/components/organisms/ThemeProvier'
 import { Toaster } from '@foundation/ui/src/components/molecules/Toaster/Toaster'
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({
+  subsets: ['latin'],
+})
+
+const merriweather = Merriweather({
+  subsets: ['latin'],
+  weight: ['300', '400', '700', '900'],
+  variable: '--font-merriweather',
+})
 
 export const metadata: Metadata = {
   title: 'Foundation X | Karthick Ragavendran',

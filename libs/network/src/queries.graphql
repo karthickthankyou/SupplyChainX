@@ -36,3 +36,22 @@ query GetAuthProvider($uid: String!) {
     type
   }
 }
+
+query manufacturerMe {
+  manufacturerMe {
+    uid
+    createdAt
+    user {
+      image
+      name
+    }
+  }
+}
+
+mutation createManufacturer(
+  $createManufacturerInput: CreateManufacturerInput!
+) {
+  createManufacturer(createManufacturerInput: $createManufacturerInput) {
+    uid
+  }
+}

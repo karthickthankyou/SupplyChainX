@@ -18,6 +18,8 @@ import { PrismaService } from 'src/common/prisma/prisma.service'
 import { User } from 'src/models/users/entity/user.entity'
 import { Product } from 'src/models/products/graphql/entity/product.entity'
 import { Warehouse } from 'src/models/warehouses/graphql/entity/warehouse.entity'
+import { AllowAuthenticated, GetUser } from 'src/common/auth/auth.decorator'
+import { GetUserType } from 'src/common/util/types'
 
 @Resolver(() => Manufacturer)
 export class ManufacturersResolver {
@@ -41,6 +43,14 @@ export class ManufacturersResolver {
   @Query(() => Manufacturer, { name: 'manufacturer' })
   findOne(@Args() args: FindUniqueManufacturerArgs) {
     return this.manufacturersService.findOne(args)
+  }
+
+  @AllowAuthenticated()
+  @Query(() => Manufacturer, { name: 'manufacturerMe', nullable: true })
+  manufacturerMe(@GetUser() user: GetUserType) {
+    return this.manufacturersService.findOne({
+      where: { uid: user.uid },
+    })
   }
 
   @Mutation(() => Manufacturer)

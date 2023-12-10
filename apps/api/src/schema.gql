@@ -125,6 +125,7 @@ type Query {
   user(where: UserWhereUniqueInput): User!
   manufacturers(distinct: [ManufacturerScalarFieldEnum!], where: ManufacturerWhereInput, orderBy: [ManufacturerOrderByWithRelationInput!], cursor: ManufacturerWhereUniqueInput, take: Int, skip: Int): [Manufacturer!]!
   manufacturer(where: ManufacturerWhereUniqueInput!): Manufacturer!
+  manufacturerMe: Manufacturer
   distributors(distinct: [DistributorScalarFieldEnum!], where: DistributorWhereInput, orderBy: [DistributorOrderByWithRelationInput!], cursor: DistributorWhereUniqueInput, take: Int, skip: Int): [Distributor!]!
   distributor(where: DistributorWhereUniqueInput!): Distributor!
   retailers(distinct: [RetailerScalarFieldEnum!], where: RetailerWhereInput, orderBy: [RetailerOrderByWithRelationInput!], cursor: RetailerWhereUniqueInput, take: Int, skip: Int): [Retailer!]!
