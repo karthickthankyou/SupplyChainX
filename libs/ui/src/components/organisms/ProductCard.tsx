@@ -9,7 +9,7 @@ export const ProductCard = ({
   const { name, image, createdAt, description } = product
 
   return (
-    <div className="gap-4 mb-4 overflow-hidden rounded-lg ">
+    <div className="gap-4 mb-4 overflow-hidden border border-white rounded-lg shadow-xl">
       {image && (
         <img
           src={image}
@@ -17,7 +17,7 @@ export const ProductCard = ({
           className="object-cover w-full aspect-square"
         />
       )}
-      <div className="flex flex-col justify-between p-2">
+      <div className="flex flex-col justify-between p-4 bg-white/20">
         <div>
           <h3 className="text-lg font-semibold">{name}</h3>
           {description && <p className="mt-2 text-gray-600">{description}</p>}

@@ -561,6 +561,7 @@ export type Query = {
   manufacturer: Manufacturer
   manufacturerMe?: Maybe<Manufacturer>
   manufacturers: Array<Manufacturer>
+  myInventory: Array<Inventory>
   myProducts: Array<Product>
   myWarehouses: Array<Warehouse>
   product: Product
@@ -633,6 +634,15 @@ export type QueryManufacturersArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>
   take?: InputMaybe<Scalars['Int']['input']>
   where?: InputMaybe<ManufacturerWhereInput>
+}
+
+export type QueryMyInventoryArgs = {
+  cursor?: InputMaybe<InventoryWhereUniqueInput>
+  distinct?: InputMaybe<Array<InventoryScalarFieldEnum>>
+  orderBy?: InputMaybe<Array<InventoryOrderByWithRelationInput>>
+  skip?: InputMaybe<Scalars['Int']['input']>
+  take?: InputMaybe<Scalars['Int']['input']>
+  where?: InputMaybe<InventoryWhereInput>
 }
 
 export type QueryMyProductsArgs = {
@@ -1137,7 +1147,7 @@ export type MyWarehousesQuery = {
     inventories: Array<{
       __typename?: 'Inventory'
       quantity: number
-      product: { __typename?: 'Product'; name: string }
+      product: { __typename?: 'Product'; name: string; image?: string | null }
     }>
   }>
 }
@@ -1181,6 +1191,15 @@ export type CreateProductMutation = {
   createProduct: { __typename?: 'Product'; id: number }
 }
 
+export type CreateInventoryMutationVariables = Exact<{
+  createInventoryInput: CreateInventoryInput
+}>
+
+export type CreateInventoryMutation = {
+  __typename?: 'Mutation'
+  createInventory: { __typename?: 'Inventory'; id: number }
+}
+
 export const namedOperations = {
   Query: {
     getCredentials: 'getCredentials',
@@ -1195,6 +1214,7 @@ export const namedOperations = {
     createManufacturer: 'createManufacturer',
     createWarehouse: 'createWarehouse',
     createProduct: 'createProduct',
+    createInventory: 'createInventory',
   },
 }
 
@@ -1636,6 +1656,10 @@ export const MyWarehousesDocument = /*#__PURE__*/ {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'name' },
                             },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'image' },
+                            },
                           ],
                         },
                       },
@@ -1863,4 +1887,58 @@ export const CreateProductDocument = /*#__PURE__*/ {
 } as unknown as DocumentNode<
   CreateProductMutation,
   CreateProductMutationVariables
+>
+export const CreateInventoryDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'createInventory' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'createInventoryInput' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'CreateInventoryInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'createInventory' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'createInventoryInput' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'createInventoryInput' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CreateInventoryMutation,
+  CreateInventoryMutationVariables
 >

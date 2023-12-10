@@ -39,16 +39,16 @@ export default async function EmployerLayout({
   }
 
   return (
-    <div className="flex gap-4 mt-2">
+    <div className="flex gap-4 mt-2 ">
       <div className="hidden w-full max-w-xs sm:block">
         <ManufacturerMenu manufacturerMe={manufacturerMe} />
       </div>
 
-      <div className="flex-grow">
+      <div className="flex-grow ">
         <div className="sm:hidden">
           <ManufacturerSidebar manufacturerMe={manufacturerMe} />
         </div>
-        {children}
+        <div className="p-4 bg-gray-100">{children}</div>
       </div>
     </div>
   )

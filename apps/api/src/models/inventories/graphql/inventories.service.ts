@@ -10,10 +10,30 @@ import { UpdateInventoryInput } from './dtos/update-inventory.input'
 @Injectable()
 export class InventoriesService {
   constructor(private readonly prisma: PrismaService) {}
-  create(createInventoryInput: CreateInventoryInput) {
-    return this.prisma.inventory.create({
-      data: createInventoryInput,
+  async create({ productId, quantity, warehouseId }: CreateInventoryInput) {
+    const existingInventory = await this.prisma.inventory.findFirst({
+      where: {
+        productId,
+        warehouseId,
+      },
     })
+
+    if (existingInventory) {
+      return this.prisma.inventory.update({
+        where: {
+          id: existingInventory.id,
+        },
+        data: {
+          quantity: {
+            increment: quantity,
+          },
+        },
+      })
+    } else {
+      return this.prisma.inventory.create({
+        data: { quantity, productId, warehouseId },
+      })
+    }
   }
 
   findAll(args: FindManyInventoryArgs) {

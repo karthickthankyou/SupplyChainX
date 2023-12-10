@@ -139,6 +139,7 @@ type Query {
   myWarehouses(distinct: [WarehouseScalarFieldEnum!], where: WarehouseWhereInput, orderBy: [WarehouseOrderByWithRelationInput!], cursor: WarehouseWhereUniqueInput, take: Int, skip: Int): [Warehouse!]!
   warehouse(where: WarehouseWhereUniqueInput!): Warehouse!
   inventories(distinct: [InventoryScalarFieldEnum!], where: InventoryWhereInput, orderBy: [InventoryOrderByWithRelationInput!], cursor: InventoryWhereUniqueInput, take: Int, skip: Int): [Inventory!]!
+  myInventory(distinct: [InventoryScalarFieldEnum!], where: InventoryWhereInput, orderBy: [InventoryOrderByWithRelationInput!], cursor: InventoryWhereUniqueInput, take: Int, skip: Int): [Inventory!]!
   inventory(where: InventoryWhereUniqueInput!): Inventory!
   transactions(distinct: [TransactionScalarFieldEnum!], where: TransactionWhereInput, orderBy: [TransactionOrderByWithRelationInput!], cursor: TransactionWhereUniqueInput, take: Int, skip: Int): [Transaction!]!
   transaction(where: TransactionWhereUniqueInput!): Transaction!

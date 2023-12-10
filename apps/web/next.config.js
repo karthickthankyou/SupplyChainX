@@ -4,7 +4,10 @@ const nextConfig = {
     externalDir: true,
   },
   images: {
-    remotePatterns: [{ hostname: 'lh3.googleusercontent.com' }],
+    remotePatterns: [
+      { hostname: 'lh3.googleusercontent.com' },
+      { hostname: 'firebasestorage.googleapis.com' },
+    ],
   },
 }
 

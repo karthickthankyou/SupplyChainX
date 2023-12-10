@@ -30,3 +30,9 @@ export const formSchemaCreateProduct = z.object({
   description: z.string().optional(),
   image: z.any().optional(),
 })
+
+export const formSchemaUpsertInventory = z.object({
+  warehouseId: z.number(),
+  productId: z.number(),
+  quantity: z.number(),
+})

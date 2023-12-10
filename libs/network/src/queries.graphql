@@ -71,6 +71,7 @@ query myWarehouses(
       quantity
       product {
         name
+        image
       }
     }
   }
@@ -99,6 +100,12 @@ mutation createWarehouse($createWarehouseInput: CreateWarehouseInput!) {
 
 mutation createProduct($createProductInput: CreateProductInput!) {
   createProduct(createProductInput: $createProductInput) {
+    id
+  }
+}
+
+mutation createInventory($createInventoryInput: CreateInventoryInput!) {
+  createInventory(createInventoryInput: $createInventoryInput) {
     id
   }
 }
