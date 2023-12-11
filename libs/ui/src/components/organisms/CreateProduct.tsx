@@ -19,7 +19,7 @@ export const CreateProduct = () => {
 
   return (
     <div>
-      <Title className="mb-2 text-lg font-semibold">Create company</Title>{' '}
+      <Title className="mb-2 text-lg font-semibold">Create product</Title>{' '}
       <form
         onSubmit={handleSubmit(async ({ name, description, image }) => {
           const images = await uploadImages(image)

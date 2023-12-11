@@ -88,6 +88,11 @@ query myWarehouses(
     name
     description
     createdAt
+    location {
+      address
+      latitude
+      longitude
+    }
     inventories {
       quantity
       product {

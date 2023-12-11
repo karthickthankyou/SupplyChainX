@@ -1189,6 +1189,12 @@ export type MyWarehousesQuery = {
     name: string
     description?: string | null
     createdAt: any
+    location?: {
+      __typename?: 'Location'
+      address: string
+      latitude: number
+      longitude: number
+    } | null
     inventories: Array<{
       __typename?: 'Inventory'
       quantity: number
@@ -1807,6 +1813,27 @@ export const MyWarehousesDocument = /*#__PURE__*/ {
                 { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'description' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'location' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'address' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'latitude' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'longitude' },
+                      },
+                    ],
+                  },
+                },
                 {
                   kind: 'Field',
                   name: { kind: 'Name', value: 'inventories' },

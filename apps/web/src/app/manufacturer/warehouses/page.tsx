@@ -25,6 +25,8 @@ export default async function WarehousesPage() {
         <Link href="/manufacturer/createWarehouse">New</Link>
       </div>
 
+      {data?.myWarehouses.length === 0 ? <div>No warehouses found.</div> : null}
+
       {data?.myWarehouses.map((warehouse) => (
         <WarehouseCard
           warehouse={warehouse}

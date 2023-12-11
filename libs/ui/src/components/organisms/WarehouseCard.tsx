@@ -1,9 +1,10 @@
 import { MyWarehousesQuery } from '@foundation/network/src/generated'
-import { Description } from '../atoms/typography'
 import { format } from 'date-fns'
 import { UpsertInventory } from './UpsertInventory'
 import Image from 'next/image'
 import { TransferGoods } from './TransferGoods'
+import { MapLink } from './MapLink'
+import { StaticMapSimple } from './StaticMap'
 
 type WarehouseProps = {
   warehouse: MyWarehousesQuery['myWarehouses'][0]
@@ -16,11 +17,33 @@ export const WarehouseCard = ({
 }: WarehouseProps) => {
   return (
     <div className="warehouse-card">
-      <div className="text-xl font-semibold">{warehouse.name}</div>
-      <Description>{warehouse.description}</Description>
-      <p className="text-sm text-gray">
-        {format(new Date(warehouse.createdAt), 'PP')}
-      </p>
+      <div className="flex gap-2">
+        <MapLink
+          lat={warehouse.location?.latitude}
+          lng={warehouse.location?.longitude}
+        >
+          <StaticMapSimple
+            position={{
+              lat: warehouse.location?.latitude,
+              lng: warehouse.location?.longitude,
+            }}
+            className="border-2 border-white rounded-lg shadow-lg w-36 h-36"
+          />
+        </MapLink>
+        <div className="mb-2 ">
+          <div className="flex items-center gap-2">
+            <div className="flex items-center justify-center w-12 h-12 text-xl font-semibold border-2 border-black rounded-lg">
+              #{warehouse.id}
+            </div>
+            <div className="text-xl font-semibold">{warehouse.name}</div>
+          </div>
+          <div className="text-sm">{warehouse.location?.address}</div>
+          <div className="text-sm">{warehouse.description}</div>
+          <div className="text-sm text-gray">
+            {format(new Date(warehouse.createdAt), 'PP')}
+          </div>
+        </div>
+      </div>
       <div className="flex items-center gap-2 mt-4 mb-2 ">
         <div className="font-semibold">Inventory</div>
         {showUpsertInventory ? <UpsertInventory warehouse={warehouse} /> : null}
@@ -36,7 +59,7 @@ export const WarehouseCard = ({
               src={inventory.product.image || ''}
               width={200}
               height={200}
-              className="w-full aspect-square"
+              className="object-cover w-full aspect-square"
               alt={''}
             />
             <div className="h-full p-2 bg-white">

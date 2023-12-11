@@ -64,7 +64,7 @@ export const CreateWarehouseContent = ({
         })}
         className="space-y-2"
       >
-        <h1 className="mb-2 text-lg font-semibold">Create company</h1>{' '}
+        <h1 className="mb-2 text-lg font-semibold">Create warehouse</h1>{' '}
         <Input {...register('name')} placeholder="Warehouse name" />
         <Textarea
           {...register('description')}
