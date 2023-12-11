@@ -35,8 +35,6 @@ export default async function DistributorLayout({
     },
   })
 
-  console.log('data, error ', data, error)
-
   const retailerMe = data?.retailerMe
 
   if (!retailerMe) {

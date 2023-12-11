@@ -34,8 +34,6 @@ export default async function DistributorLayout({
     },
   })
 
-  console.log('data, error ', data, error)
-
   const distributorMe = data?.distributorMe
 
   if (!distributorMe) {

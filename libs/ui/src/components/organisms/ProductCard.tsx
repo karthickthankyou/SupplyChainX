@@ -1,12 +1,13 @@
 import { MyProductsQuery } from '@foundation/network/src/generated'
 import { format } from 'date-fns'
+import Link from 'next/link'
 
 export const ProductCard = ({
   product,
 }: {
   product: MyProductsQuery['myProducts'][0]
 }) => {
-  const { name, image, createdAt, description } = product
+  const { name, image, createdAt, description, id } = product
 
   return (
     <div className="gap-4 mb-4 overflow-hidden border border-white rounded-lg shadow-xl">
@@ -25,6 +26,7 @@ export const ProductCard = ({
         <div className="mt-2 text-sm text-gray-500">
           <span> {format(new Date(createdAt), 'PP')}</span>
         </div>
+        <Link href={`/manufacturer/products/${id}`}>Flow</Link>
       </div>
     </div>
   )

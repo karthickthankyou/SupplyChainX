@@ -166,8 +166,8 @@ export class InventoriesResolver {
 
   @ResolveField(() => Warehouse)
   warehouse(@Parent() inventory: Inventory) {
-    return this.prisma.inventory.findUnique({
-      where: { id: inventory.id },
-    }).warehouse
+    return this.prisma.warehouse.findUnique({
+      where: { id: inventory.warehouseId },
+    })
   }
 }

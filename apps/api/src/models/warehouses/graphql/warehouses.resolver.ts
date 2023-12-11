@@ -82,10 +82,20 @@ export class WarehousesResolver {
   }
 
   @ResolveField(() => Location, { nullable: true })
-  location(@Parent() warehouse: Warehouse) {
-    return this.prisma.location.findUnique({
-      where: { warehouseId: warehouse.id },
-    })
+  async location(@Parent() warehouse: Warehouse) {
+    console.log('warehouse', warehouse.id)
+    try {
+      const location = await this.prisma.location.findUnique({
+        where: { warehouseId: warehouse.id },
+      })
+
+      //   console.log('warehouse , location', warehouse, location)
+      return location
+    } catch (error) {
+      //   console.error('-----')
+      //   console.error('error ', error, warehouse.id)
+      //   console.error('-----')
+    }
   }
 
   @ResolveField(() => Manufacturer, { nullable: true })

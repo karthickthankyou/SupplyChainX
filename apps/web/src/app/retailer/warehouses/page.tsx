@@ -18,7 +18,6 @@ export default async function WarehousesPage() {
     },
   })
 
-  console.log('data, error  ', data, error)
   return (
     <div>
       <div className="flex justify-between mb-6">

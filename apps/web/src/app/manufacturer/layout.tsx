@@ -30,8 +30,6 @@ export default async function EmployerLayout({
     },
   })
 
-  console.log('data, error ', data, error)
-
   const manufacturerMe = data?.manufacturerMe
 
   if (!manufacturerMe) {
