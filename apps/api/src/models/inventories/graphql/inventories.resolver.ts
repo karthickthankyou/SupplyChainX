@@ -60,17 +60,11 @@ export class InventoriesResolver {
     @Args('quantity') quantity: number,
     @GetUser() user: GetUserType,
   ): Promise<Inventory | null> {
-    await this.inventoriesService.checkWarehouseOwner({
+    return this.inventoriesService.reduceInventory({
       uid: user.uid,
       warehouseId,
-    })
-
-    const inventory = await this.prisma.inventory.findFirst({
-      where: { productId, warehouseId },
-    })
-    return this.prisma.inventory.update({
-      where: { id: inventory.id },
-      data: { quantity: { decrement: quantity } },
+      productId,
+      quantity,
     })
   }
 

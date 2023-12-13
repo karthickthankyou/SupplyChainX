@@ -8,6 +8,7 @@ import { SelectProducts } from './SelectProducts'
 import { upsertInventory } from '@foundation/common/src/actions/upsertInventory'
 import { Plus } from 'lucide-react'
 import { useState } from 'react'
+import { Button } from '../atoms/button'
 
 export const UpsertInventory = ({
   warehouse,
@@ -24,6 +25,8 @@ export const UpsertInventory = ({
   console.log('errors ', errors)
 
   const [close, setClose] = useState(false)
+  const [loading, setLoading] = useState(false)
+
   return (
     <SimpleDialog
       close={close}
@@ -37,12 +40,16 @@ export const UpsertInventory = ({
       <form
         onSubmit={handleSubmit(async ({ productId, quantity, warehouseId }) => {
           console.log('data', productId, quantity, warehouseId)
+          setLoading(true)
+
           await upsertInventory({ productId, quantity, warehouseId })
+          setLoading(false)
+
           setClose(true)
           reset()
         })}
       >
-        <Label title="Product">
+        <Label title="Product" error={errors.productId?.message}>
           <SelectProducts
             onSelect={function (productId: number): void {
               setValue('productId', productId)
@@ -60,7 +67,9 @@ export const UpsertInventory = ({
             value={warehouse.id}
           />
         </Label>
-        <button type="submit">Submit</button>
+        <Button type="submit" loading={loading}>
+          Submit
+        </Button>
       </form>
     </SimpleDialog>
   )

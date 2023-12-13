@@ -77,33 +77,6 @@ mutation createManufacturer(
   }
 }
 
-query myWarehouses(
-  $skip: Int
-  $take: Int
-  $orderBy: [WarehouseOrderByWithRelationInput!]
-  $where: WarehouseWhereInput
-) {
-  myWarehouses(skip: $skip, take: $take, orderBy: $orderBy, where: $where) {
-    id
-    name
-    description
-    createdAt
-    location {
-      address
-      latitude
-      longitude
-    }
-    inventories {
-      quantity
-      product {
-        name
-        image
-        id
-      }
-    }
-  }
-}
-
 query myProducts(
   $skip: Int
   $take: Int
@@ -187,6 +160,7 @@ query product($where: ProductWhereUniqueInput!) {
       id
       quantity
       toWarehouse {
+        id
         location {
           latitude
           longitude
@@ -194,6 +168,7 @@ query product($where: ProductWhereUniqueInput!) {
         }
       }
       fromWarehouse {
+        id
         location {
           latitude
           longitude
@@ -220,6 +195,92 @@ query product($where: ProductWhereUniqueInput!) {
         }
       }
       quantity
+    }
+  }
+}
+
+mutation reduceInventory(
+  $warehouseId: Int!
+  $productId: Int!
+  $quantity: Int!
+) {
+  reduceInventory(
+    warehouseId: $warehouseId
+    productId: $productId
+    quantity: $quantity
+  ) {
+    id
+  }
+}
+
+fragment TransactionDetails on Transaction {
+  id
+  quantity
+  toWarehouse {
+    name
+    id
+  }
+  fromWarehouse {
+    name
+    id
+  }
+  createdAt
+  product {
+    name
+    image
+    id
+  }
+}
+
+query myTransactions(
+  $skip: Int
+  $take: Int
+  $cursor: TransactionWhereUniqueInput
+  $orderBy: [TransactionOrderByWithRelationInput!]
+  $where: TransactionWhereInput
+  $distinct: [TransactionScalarFieldEnum!]
+) {
+  myTransactions(
+    skip: $skip
+    take: $take
+    cursor: $cursor
+    orderBy: $orderBy
+    where: $where
+    distinct: $distinct
+  ) {
+    ...TransactionDetails
+  }
+}
+
+query myWarehouses(
+  $skip: Int
+  $take: Int
+  $orderBy: [WarehouseOrderByWithRelationInput!]
+  $where: WarehouseWhereInput
+) {
+  myWarehouses(skip: $skip, take: $take, orderBy: $orderBy, where: $where) {
+    id
+    name
+    description
+    createdAt
+    location {
+      address
+      latitude
+      longitude
+    }
+    ins {
+      ...TransactionDetails
+    }
+    outs {
+      ...TransactionDetails
+    }
+    inventories {
+      quantity
+      product {
+        name
+        image
+        id
+      }
     }
   }
 }

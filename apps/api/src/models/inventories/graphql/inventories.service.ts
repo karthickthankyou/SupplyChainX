@@ -11,29 +11,52 @@ import { UpdateInventoryInput } from './dtos/update-inventory.input'
 export class InventoriesService {
   constructor(private readonly prisma: PrismaService) {}
   async create({ productId, quantity, warehouseId }: CreateInventoryInput) {
-    const existingInventory = await this.prisma.inventory.findFirst({
-      where: {
-        productId,
-        warehouseId,
-      },
-    })
-
-    if (existingInventory) {
-      return this.prisma.inventory.update({
+    return this.prisma.$transaction(async (prisma) => {
+      const existingInventory = await prisma.inventory.findFirst({
         where: {
-          id: existingInventory.id,
+          productId,
+          warehouseId,
         },
-        data: {
-          quantity: {
-            increment: quantity,
+      })
+
+      let updatedInventory
+
+      if (existingInventory) {
+        updatedInventory = await prisma.inventory.update({
+          where: {
+            id: existingInventory.id,
           },
+          data: {
+            quantity: {
+              increment: quantity,
+            },
+          },
+        })
+      } else {
+        updatedInventory = await prisma.inventory.create({
+          data: { quantity, productId, warehouseId },
+        })
+      }
+
+      // Create a transaction record
+      await prisma.transaction.create({
+        data: {
+          product: {
+            connect: {
+              id: productId,
+            },
+          },
+          toWarehouse: {
+            connect: {
+              id: warehouseId,
+            },
+          },
+          quantity,
         },
       })
-    } else {
-      return this.prisma.inventory.create({
-        data: { quantity, productId, warehouseId },
-      })
-    }
+
+      return updatedInventory
+    })
   }
 
   findAll(args: FindManyInventoryArgs) {
@@ -72,6 +95,49 @@ export class InventoriesService {
     ) {
       throw new Error('Warehouse does not belong to you')
     }
+  }
+
+  async reduceInventory({
+    uid,
+    warehouseId,
+    productId,
+    quantity,
+  }: {
+    uid: string
+    warehouseId: number
+    productId: number
+    quantity: number
+  }) {
+    await this.checkWarehouseOwner({
+      uid,
+      warehouseId,
+    })
+
+    return this.prisma.$transaction(async (prisma) => {
+      const inventory = await prisma.inventory.findFirst({
+        where: { productId, warehouseId },
+      })
+
+      if (!inventory) {
+        throw new Error('Inventory not found')
+      }
+
+      const updatedInventory = await prisma.inventory.update({
+        where: { id: inventory.id },
+        data: { quantity: { decrement: quantity } },
+      })
+
+      // Create a transaction record for reducing inventory
+      await prisma.transaction.create({
+        data: {
+          product: { connect: { id: productId } },
+          fromWarehouse: { connect: { id: warehouseId } },
+          quantity,
+        },
+      })
+
+      return updatedInventory
+    })
   }
 
   remove(args: FindUniqueInventoryArgs) {

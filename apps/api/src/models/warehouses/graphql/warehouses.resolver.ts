@@ -83,18 +83,14 @@ export class WarehousesResolver {
 
   @ResolveField(() => Location, { nullable: true })
   async location(@Parent() warehouse: Warehouse) {
-    console.log('warehouse', warehouse.id)
     try {
       const location = await this.prisma.location.findUnique({
         where: { warehouseId: warehouse.id },
       })
 
-      //   console.log('warehouse , location', warehouse, location)
       return location
     } catch (error) {
-      //   console.error('-----')
-      //   console.error('error ', error, warehouse.id)
-      //   console.error('-----')
+      console.error(error)
     }
   }
 

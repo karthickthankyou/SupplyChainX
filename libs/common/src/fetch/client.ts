@@ -9,6 +9,5 @@ export async function fetchGraphQLClient<TData, V>({
   FetchResult<TData>
 > {
   const token = await fetch('/api/auth/token').then((res) => res.json())
-  console.log('token ', token)
   return fetchGraphQL({ document, apiSecret, config, variables, token })
 }

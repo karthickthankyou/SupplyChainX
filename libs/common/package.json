@@ -22,9 +22,12 @@
   "devDependencies": {
     "@types/bcrypt": "^5.0.1",
     "@types/jsonwebtoken": "^9.0.4",
+    "@types/react": "^18.2.45",
+    "react": "^18",
     "typescript": "^5.2.2"
   },
   "peerDependencies": {
-    "next": "14.0.2"
+    "next": "14.0.2",
+    "react": "^18"
   }
 }

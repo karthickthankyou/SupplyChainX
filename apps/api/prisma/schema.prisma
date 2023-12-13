@@ -132,11 +132,11 @@ model Transaction {
     updatedAt DateTime @updatedAt
 
     productId       Int
-    fromWarehouseId Int
-    toWarehouseId   Int
+    fromWarehouseId Int?
+    toWarehouseId   Int?
     quantity        Int
 
-    product       Product   @relation(fields: [productId], references: [id])
-    fromWarehouse Warehouse @relation("FromWarehouse", fields: [fromWarehouseId], references: [id])
-    toWarehouse   Warehouse @relation("ToWarehouse", fields: [toWarehouseId], references: [id])
+    product       Product    @relation(fields: [productId], references: [id])
+    fromWarehouse Warehouse? @relation("FromWarehouse", fields: [fromWarehouseId], references: [id])
+    toWarehouse   Warehouse? @relation("ToWarehouse", fields: [toWarehouseId], references: [id])
 }

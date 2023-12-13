@@ -38,7 +38,7 @@ export default async function EmployerLayout({
 
   return (
     <div className="flex gap-4 mt-2 ">
-      <div className="hidden w-full max-w-xs sm:block">
+      <div className="hidden w-full max-w-xs min-w-min sm:block">
         <ManufacturerMenu manufacturerMe={manufacturerMe} />
       </div>
 

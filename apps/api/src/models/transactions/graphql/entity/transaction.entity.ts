@@ -1,4 +1,4 @@
-import { ObjectType } from '@nestjs/graphql'
+import { Field, ObjectType } from '@nestjs/graphql'
 import { Transaction as TransactionType } from '@prisma/client'
 import { RestrictProperties } from 'src/common/dtos/common.input'
 
@@ -10,7 +10,9 @@ export class Transaction
   createdAt: Date
   updatedAt: Date
   productId: number
+  @Field({ nullable: true })
   fromWarehouseId: number
+  @Field({ nullable: true })
   toWarehouseId: number
   quantity: number
   // Todo Add below to make optional fields optional.

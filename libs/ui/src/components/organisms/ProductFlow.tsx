@@ -1,6 +1,6 @@
 'use client'
 
-import { Map } from './Map'
+import { Map as WorldMap } from './Map'
 import { initialViewState } from '@foundation/util/constants'
 import { ProductQuery } from '@foundation/network/src/generated'
 import { Marker } from './Map/MapMarker'
@@ -9,13 +9,37 @@ import { Panel } from './Map/Panel'
 import { Factory, LucideIcon, Store, Warehouse } from 'lucide-react'
 import { MapLine } from './Map/MapLine'
 
+type Transactions = ProductQuery['product']['transactions']
+const aggregateTransactions = (transactions?: Transactions): Transactions => {
+  const transactionsMap = new Map<string, Transactions[number]>()
+
+  transactions?.forEach((transaction) => {
+    if (!transaction.fromWarehouse || !transaction.toWarehouse) {
+      return // Skip transactions without from or to warehouses
+    }
+
+    const key = `${transaction.fromWarehouse.id},${transaction.toWarehouse.id}`
+
+    if (transactionsMap.has(key)) {
+      const existingTransaction = transactionsMap.get(key)
+      if (existingTransaction) {
+        existingTransaction.quantity += transaction.quantity
+      }
+    } else {
+      transactionsMap.set(key, { ...transaction })
+    }
+  })
+
+  return Array.from(transactionsMap.values())
+}
+
 export const ProductFlow = ({
   product,
 }: {
-  product: ProductQuery['product'] | undefined
+  product?: ProductQuery['product']
 }) => {
   return (
-    <Map initialViewState={initialViewState}>
+    <WorldMap initialViewState={initialViewState}>
       <Panel position="right-center">
         <DefaultZoomControls />
       </Panel>
@@ -39,17 +63,17 @@ export const ProductFlow = ({
           </div>
         </Marker>
       ))}
-      {product?.transactions.map((transaction) => (
+      {aggregateTransactions(product?.transactions).map((transaction) => (
         <MapLine
           key={transaction.id}
-          from={transaction.fromWarehouse.location}
-          to={transaction.toWarehouse.location}
+          from={transaction.fromWarehouse?.location}
+          to={transaction.toWarehouse?.location}
           lineId={`${transaction.id}`}
         >
           {transaction.quantity}
         </MapLine>
       ))}
-    </Map>
+    </WorldMap>
   )
 }
 

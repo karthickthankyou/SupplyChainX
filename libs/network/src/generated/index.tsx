@@ -80,10 +80,10 @@ export type CreateRetailerInput = {
 }
 
 export type CreateTransactionInput = {
-  fromWarehouseId: Scalars['Int']['input']
+  fromWarehouseId?: InputMaybe<Scalars['Int']['input']>
   productId: Scalars['Int']['input']
   quantity: Scalars['Int']['input']
-  toWarehouseId: Scalars['Int']['input']
+  toWarehouseId?: InputMaybe<Scalars['Int']['input']>
 }
 
 export type CreateUserWithCredentialsInput = {
@@ -581,6 +581,7 @@ export type Query = {
   manufacturers: Array<Manufacturer>
   myInventory: Array<Inventory>
   myProducts: Array<Product>
+  myTransactions: Array<Transaction>
   myWarehouses: Array<Warehouse>
   product: Product
   products: Array<Product>
@@ -671,6 +672,15 @@ export type QueryMyProductsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>
   take?: InputMaybe<Scalars['Int']['input']>
   where?: InputMaybe<ProductWhereInput>
+}
+
+export type QueryMyTransactionsArgs = {
+  cursor?: InputMaybe<TransactionWhereUniqueInput>
+  distinct?: InputMaybe<Array<TransactionScalarFieldEnum>>
+  orderBy?: InputMaybe<Array<TransactionOrderByWithRelationInput>>
+  skip?: InputMaybe<Scalars['Int']['input']>
+  take?: InputMaybe<Scalars['Int']['input']>
+  where?: InputMaybe<TransactionWhereInput>
 }
 
 export type QueryMyWarehousesArgs = {
@@ -814,14 +824,14 @@ export type StringFilter = {
 export type Transaction = {
   __typename?: 'Transaction'
   createdAt: Scalars['DateTime']['output']
-  fromWarehouse: Warehouse
-  fromWarehouseId: Scalars['Int']['output']
+  fromWarehouse?: Maybe<Warehouse>
+  fromWarehouseId?: Maybe<Scalars['Int']['output']>
   id: Scalars['Int']['output']
   product: Product
   productId: Scalars['Int']['output']
   quantity: Scalars['Int']['output']
-  toWarehouse: Warehouse
-  toWarehouseId: Scalars['Int']['output']
+  toWarehouse?: Maybe<Warehouse>
+  toWarehouseId?: Maybe<Scalars['Int']['output']>
   updatedAt: Scalars['DateTime']['output']
 }
 
@@ -1172,42 +1182,6 @@ export type CreateManufacturerMutation = {
   createManufacturer: { __typename?: 'Manufacturer'; uid: string }
 }
 
-export type MyWarehousesQueryVariables = Exact<{
-  skip?: InputMaybe<Scalars['Int']['input']>
-  take?: InputMaybe<Scalars['Int']['input']>
-  orderBy?: InputMaybe<
-    Array<WarehouseOrderByWithRelationInput> | WarehouseOrderByWithRelationInput
-  >
-  where?: InputMaybe<WarehouseWhereInput>
-}>
-
-export type MyWarehousesQuery = {
-  __typename?: 'Query'
-  myWarehouses: Array<{
-    __typename?: 'Warehouse'
-    id: number
-    name: string
-    description?: string | null
-    createdAt: any
-    location?: {
-      __typename?: 'Location'
-      address: string
-      latitude: number
-      longitude: number
-    } | null
-    inventories: Array<{
-      __typename?: 'Inventory'
-      quantity: number
-      product: {
-        __typename?: 'Product'
-        name: string
-        image?: string | null
-        id: number
-      }
-    }>
-  }>
-}
-
 export type MyProductsQueryVariables = Exact<{
   skip?: InputMaybe<Scalars['Int']['input']>
   take?: InputMaybe<Scalars['Int']['input']>
@@ -1311,24 +1285,26 @@ export type ProductQuery = {
       __typename?: 'Transaction'
       id: number
       quantity: number
-      toWarehouse: {
+      toWarehouse?: {
         __typename?: 'Warehouse'
+        id: number
         location?: {
           __typename?: 'Location'
           latitude: number
           longitude: number
           id: number
         } | null
-      }
-      fromWarehouse: {
+      } | null
+      fromWarehouse?: {
         __typename?: 'Warehouse'
+        id: number
         location?: {
           __typename?: 'Location'
           latitude: number
           longitude: number
           id: number
         } | null
-      }
+      } | null
     }>
     inventories: Array<{
       __typename?: 'Inventory'
@@ -1350,6 +1326,137 @@ export type ProductQuery = {
   }
 }
 
+export type TransactionDetailsFragment = {
+  __typename?: 'Transaction'
+  id: number
+  quantity: number
+  createdAt: any
+  toWarehouse?: { __typename?: 'Warehouse'; name: string; id: number } | null
+  fromWarehouse?: { __typename?: 'Warehouse'; name: string; id: number } | null
+  product: {
+    __typename?: 'Product'
+    name: string
+    image?: string | null
+    id: number
+  }
+}
+
+export type MyTransactionsQueryVariables = Exact<{
+  skip?: InputMaybe<Scalars['Int']['input']>
+  take?: InputMaybe<Scalars['Int']['input']>
+  cursor?: InputMaybe<TransactionWhereUniqueInput>
+  orderBy?: InputMaybe<
+    | Array<TransactionOrderByWithRelationInput>
+    | TransactionOrderByWithRelationInput
+  >
+  where?: InputMaybe<TransactionWhereInput>
+  distinct?: InputMaybe<
+    Array<TransactionScalarFieldEnum> | TransactionScalarFieldEnum
+  >
+}>
+
+export type MyTransactionsQuery = {
+  __typename?: 'Query'
+  myTransactions: Array<{
+    __typename?: 'Transaction'
+    id: number
+    quantity: number
+    createdAt: any
+    toWarehouse?: { __typename?: 'Warehouse'; name: string; id: number } | null
+    fromWarehouse?: {
+      __typename?: 'Warehouse'
+      name: string
+      id: number
+    } | null
+    product: {
+      __typename?: 'Product'
+      name: string
+      image?: string | null
+      id: number
+    }
+  }>
+}
+
+export type MyWarehousesQueryVariables = Exact<{
+  skip?: InputMaybe<Scalars['Int']['input']>
+  take?: InputMaybe<Scalars['Int']['input']>
+  orderBy?: InputMaybe<
+    Array<WarehouseOrderByWithRelationInput> | WarehouseOrderByWithRelationInput
+  >
+  where?: InputMaybe<WarehouseWhereInput>
+}>
+
+export type MyWarehousesQuery = {
+  __typename?: 'Query'
+  myWarehouses: Array<{
+    __typename?: 'Warehouse'
+    id: number
+    name: string
+    description?: string | null
+    createdAt: any
+    location?: {
+      __typename?: 'Location'
+      address: string
+      latitude: number
+      longitude: number
+    } | null
+    ins: Array<{
+      __typename?: 'Transaction'
+      id: number
+      quantity: number
+      createdAt: any
+      toWarehouse?: {
+        __typename?: 'Warehouse'
+        name: string
+        id: number
+      } | null
+      fromWarehouse?: {
+        __typename?: 'Warehouse'
+        name: string
+        id: number
+      } | null
+      product: {
+        __typename?: 'Product'
+        name: string
+        image?: string | null
+        id: number
+      }
+    }>
+    outs: Array<{
+      __typename?: 'Transaction'
+      id: number
+      quantity: number
+      createdAt: any
+      toWarehouse?: {
+        __typename?: 'Warehouse'
+        name: string
+        id: number
+      } | null
+      fromWarehouse?: {
+        __typename?: 'Warehouse'
+        name: string
+        id: number
+      } | null
+      product: {
+        __typename?: 'Product'
+        name: string
+        image?: string | null
+        id: number
+      }
+    }>
+    inventories: Array<{
+      __typename?: 'Inventory'
+      quantity: number
+      product: {
+        __typename?: 'Product'
+        name: string
+        image?: string | null
+        id: number
+      }
+    }>
+  }>
+}
+
 export const namedOperations = {
   Query: {
     getCredentials: 'getCredentials',
@@ -1357,9 +1464,10 @@ export const namedOperations = {
     distributorMe: 'distributorMe',
     retailerMe: 'retailerMe',
     manufacturerMe: 'manufacturerMe',
-    myWarehouses: 'myWarehouses',
     myProducts: 'myProducts',
     product: 'product',
+    myTransactions: 'myTransactions',
+    myWarehouses: 'myWarehouses',
   },
   Mutation: {
     createUserWithCredentials: 'createUserWithCredentials',
@@ -1373,8 +1481,65 @@ export const namedOperations = {
     transferInventory: 'transferInventory',
     reduceInventory: 'reduceInventory',
   },
+  Fragment: {
+    TransactionDetails: 'TransactionDetails',
+  },
 }
-
+export const TransactionDetailsFragmentDoc = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'TransactionDetails' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'Transaction' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'quantity' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'toWarehouse' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'fromWarehouse' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+              ],
+            },
+          },
+          { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'product' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'image' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<TransactionDetailsFragment, unknown>
 export const CreateUserWithCredentialsDocument = /*#__PURE__*/ {
   kind: 'Document',
   definitions: [
@@ -1770,166 +1935,6 @@ export const CreateManufacturerDocument = /*#__PURE__*/ {
   CreateManufacturerMutation,
   CreateManufacturerMutationVariables
 >
-export const MyWarehousesDocument = /*#__PURE__*/ {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'myWarehouses' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'skip' } },
-          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'take' } },
-          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'orderBy' },
-          },
-          type: {
-            kind: 'ListType',
-            type: {
-              kind: 'NonNullType',
-              type: {
-                kind: 'NamedType',
-                name: {
-                  kind: 'Name',
-                  value: 'WarehouseOrderByWithRelationInput',
-                },
-              },
-            },
-          },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'where' },
-          },
-          type: {
-            kind: 'NamedType',
-            name: { kind: 'Name', value: 'WarehouseWhereInput' },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'myWarehouses' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'skip' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'skip' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'take' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'take' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'orderBy' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'orderBy' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'where' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'where' },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'location' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'address' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'latitude' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'longitude' },
-                      },
-                    ],
-                  },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'inventories' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'quantity' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'product' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'name' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'image' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'id' },
-                            },
-                          ],
-                        },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<MyWarehousesQuery, MyWarehousesQueryVariables>
 export const MyProductsDocument = /*#__PURE__*/ {
   kind: 'Document',
   definitions: [
@@ -2566,6 +2571,10 @@ export const ProductDocument = /*#__PURE__*/ {
                           selections: [
                             {
                               kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                            {
+                              kind: 'Field',
                               name: { kind: 'Name', value: 'location' },
                               selectionSet: {
                                 kind: 'SelectionSet',
@@ -2594,6 +2603,10 @@ export const ProductDocument = /*#__PURE__*/ {
                         selectionSet: {
                           kind: 'SelectionSet',
                           selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
                             {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'location' },
@@ -2712,3 +2725,438 @@ export const ProductDocument = /*#__PURE__*/ {
     },
   ],
 } as unknown as DocumentNode<ProductQuery, ProductQueryVariables>
+export const MyTransactionsDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'myTransactions' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'skip' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'take' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'cursor' },
+          },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'TransactionWhereUniqueInput' },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'orderBy' },
+          },
+          type: {
+            kind: 'ListType',
+            type: {
+              kind: 'NonNullType',
+              type: {
+                kind: 'NamedType',
+                name: {
+                  kind: 'Name',
+                  value: 'TransactionOrderByWithRelationInput',
+                },
+              },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'where' },
+          },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'TransactionWhereInput' },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'distinct' },
+          },
+          type: {
+            kind: 'ListType',
+            type: {
+              kind: 'NonNullType',
+              type: {
+                kind: 'NamedType',
+                name: { kind: 'Name', value: 'TransactionScalarFieldEnum' },
+              },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'myTransactions' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'skip' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'skip' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'take' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'take' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'cursor' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'cursor' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'orderBy' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'orderBy' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'where' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'where' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'distinct' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'distinct' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'FragmentSpread',
+                  name: { kind: 'Name', value: 'TransactionDetails' },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'TransactionDetails' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'Transaction' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'quantity' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'toWarehouse' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'fromWarehouse' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+              ],
+            },
+          },
+          { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'product' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'image' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<MyTransactionsQuery, MyTransactionsQueryVariables>
+export const MyWarehousesDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'myWarehouses' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'skip' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'take' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'orderBy' },
+          },
+          type: {
+            kind: 'ListType',
+            type: {
+              kind: 'NonNullType',
+              type: {
+                kind: 'NamedType',
+                name: {
+                  kind: 'Name',
+                  value: 'WarehouseOrderByWithRelationInput',
+                },
+              },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'where' },
+          },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'WarehouseWhereInput' },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'myWarehouses' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'skip' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'skip' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'take' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'take' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'orderBy' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'orderBy' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'where' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'where' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'location' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'address' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'latitude' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'longitude' },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'ins' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'FragmentSpread',
+                        name: { kind: 'Name', value: 'TransactionDetails' },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'outs' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'FragmentSpread',
+                        name: { kind: 'Name', value: 'TransactionDetails' },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'inventories' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'quantity' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'product' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'name' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'image' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'TransactionDetails' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'Transaction' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'quantity' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'toWarehouse' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'fromWarehouse' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+              ],
+            },
+          },
+          { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'product' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'image' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<MyWarehousesQuery, MyWarehousesQueryVariables>

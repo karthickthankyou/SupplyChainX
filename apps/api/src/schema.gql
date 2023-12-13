@@ -99,16 +99,16 @@ type Inventory {
 }
 
 type Transaction {
+  fromWarehouseId: Int
+  toWarehouseId: Int
   id: Int!
   createdAt: DateTime!
   updatedAt: DateTime!
   productId: Int!
-  fromWarehouseId: Int!
-  toWarehouseId: Int!
   quantity: Int!
   product: Product!
-  fromWarehouse: Warehouse!
-  toWarehouse: Warehouse!
+  fromWarehouse: Warehouse
+  toWarehouse: Warehouse
 }
 
 type Location {
@@ -144,6 +144,7 @@ type Query {
   myInventory(distinct: [InventoryScalarFieldEnum!], where: InventoryWhereInput, orderBy: [InventoryOrderByWithRelationInput!], cursor: InventoryWhereUniqueInput, take: Int, skip: Int): [Inventory!]!
   inventory(where: InventoryWhereUniqueInput!): Inventory!
   transactions(distinct: [TransactionScalarFieldEnum!], where: TransactionWhereInput, orderBy: [TransactionOrderByWithRelationInput!], cursor: TransactionWhereUniqueInput, take: Int, skip: Int): [Transaction!]!
+  myTransactions(distinct: [TransactionScalarFieldEnum!], where: TransactionWhereInput, orderBy: [TransactionOrderByWithRelationInput!], cursor: TransactionWhereUniqueInput, take: Int, skip: Int): [Transaction!]!
   transaction(where: TransactionWhereUniqueInput!): Transaction!
   locations(distinct: [LocationScalarFieldEnum!], where: LocationWhereInput, orderBy: [LocationOrderByWithRelationInput!], cursor: LocationWhereUniqueInput, take: Int, skip: Int): [Location!]!
   location(where: LocationWhereUniqueInput!): Location!
@@ -735,16 +736,16 @@ input UpdateInventoryInput {
 }
 
 input CreateTransactionInput {
+  fromWarehouseId: Int
+  toWarehouseId: Int
   productId: Int!
-  fromWarehouseId: Int!
-  toWarehouseId: Int!
   quantity: Int!
 }
 
 input UpdateTransactionInput {
-  productId: Int
   fromWarehouseId: Int
   toWarehouseId: Int
+  productId: Int
   quantity: Int
   id: Int!
 }
