@@ -18,5 +18,20 @@ export const initialBounds = {
   sw_lng: 77.79553938075622,
 }
 
+export type Location = {
+  latitude: number
+  longitude: number
+}
+
+type LngLatLike = {
+  lng: number
+  lat: number
+}
+
+export const initialBoundsArray = [
+  { lat: 10.801454608662539, lng: 77.79553938075622 },
+  { lat: 15.363624935782738, lng: 82.74586061924367 },
+] as [LngLatLike, LngLatLike]
+
 export const ITEMS_PER_PAGE = 6
 export const FIRST_PAGE = 1

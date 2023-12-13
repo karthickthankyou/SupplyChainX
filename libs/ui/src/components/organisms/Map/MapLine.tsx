@@ -1,10 +1,6 @@
 import React, { FunctionComponent } from 'react'
 import { Layer, Source, Marker } from 'react-map-gl'
-
-type Location = {
-  latitude: number
-  longitude: number
-}
+import { Location } from '@foundation/util/constants'
 
 type MapLineProps = {
   from?: Location | null
