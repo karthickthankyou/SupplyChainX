@@ -14,6 +14,7 @@ export const DistributorMenu = ({ distributorMe }: DistributorMeQuery) => {
         alt=""
         width={300}
         height={300}
+        className="object-cover border border-white rounded-lg shadow-lg"
       />
       <div className="mb-2">
         <Title2 className="text-xl font-semibold">

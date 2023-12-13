@@ -14,6 +14,7 @@ export const RetailerMenu = ({ retailerMe }: RetailerMeQuery) => {
         alt=""
         width={300}
         height={300}
+        className="border-white rounded-lg shadow-lg"
       />
       <div className="mb-2">
         <Title2 className="text-xl font-semibold">

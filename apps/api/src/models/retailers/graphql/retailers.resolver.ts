@@ -13,7 +13,6 @@ import { CreateRetailerInput } from './dtos/create-retailer.input'
 import { UpdateRetailerInput } from './dtos/update-retailer.input'
 import { PrismaService } from 'src/common/prisma/prisma.service'
 import { User } from 'src/models/users/entity/user.entity'
-import { Distributor } from 'src/models/distributors/graphql/entity/distributor.entity'
 import { Warehouse } from 'src/models/warehouses/graphql/entity/warehouse.entity'
 import { AllowAuthenticated, GetUser } from 'src/common/auth/auth.decorator'
 import { GetUserType } from 'src/common/util/types'
@@ -41,7 +40,7 @@ export class RetailersResolver {
   }
 
   @AllowAuthenticated()
-  @Query(() => Distributor, { name: 'retailerMe', nullable: true })
+  @Query(() => Retailer, { name: 'retailerMe', nullable: true })
   retailerMe(@GetUser() user: GetUserType) {
     return this.retailersService.findOne({
       where: { uid: user.uid },
@@ -59,16 +58,17 @@ export class RetailersResolver {
   }
 
   @ResolveField(() => User)
-  user(@Parent() distributor: Distributor) {
+  user(@Parent() retailer: Retailer) {
     return this.prisma.user.findUnique({
-      where: { uid: distributor.uid },
+      where: { uid: retailer.uid },
     })
   }
 
   @ResolveField(() => [Warehouse])
-  warehouses(@Parent() distributor: Distributor) {
-    return this.prisma.warehouse.findMany({
-      where: { distributorId: distributor.uid },
+  async warehouses(@Parent() retailer: Retailer) {
+    const warehouses = await this.prisma.warehouse.findMany({
+      where: { retailerId: retailer.uid },
     })
+    return warehouses
   }
 }

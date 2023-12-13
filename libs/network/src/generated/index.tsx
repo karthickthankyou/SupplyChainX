@@ -586,7 +586,7 @@ export type Query = {
   product: Product
   products: Array<Product>
   retailer: Retailer
-  retailerMe?: Maybe<Distributor>
+  retailerMe?: Maybe<Retailer>
   retailers: Array<Retailer>
   transaction: Transaction
   transactions: Array<Transaction>
@@ -1155,7 +1155,7 @@ export type RetailerMeQueryVariables = Exact<{ [key: string]: never }>
 export type RetailerMeQuery = {
   __typename?: 'Query'
   retailerMe?: {
-    __typename?: 'Distributor'
+    __typename?: 'Retailer'
     uid: string
     createdAt: any
     user: { __typename?: 'User'; image?: string | null; name: string }

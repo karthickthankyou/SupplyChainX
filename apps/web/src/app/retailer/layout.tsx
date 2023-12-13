@@ -42,7 +42,7 @@ export default async function DistributorLayout({
   }
 
   return (
-    <div className="flex gap-4 mt-2 ">
+    <div className="flex mt-2 ">
       <div className="hidden w-full max-w-xs sm:block">
         <RetailerMenu retailerMe={retailerMe} />
       </div>

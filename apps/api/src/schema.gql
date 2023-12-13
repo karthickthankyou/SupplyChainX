@@ -133,7 +133,7 @@ type Query {
   distributorMe: Distributor
   retailers(distinct: [RetailerScalarFieldEnum!], where: RetailerWhereInput, orderBy: [RetailerOrderByWithRelationInput!], cursor: RetailerWhereUniqueInput, take: Int, skip: Int): [Retailer!]!
   retailer(where: RetailerWhereUniqueInput!): Retailer!
-  retailerMe: Distributor
+  retailerMe: Retailer
   products(distinct: [ProductScalarFieldEnum!], where: ProductWhereInput, orderBy: [ProductOrderByWithRelationInput!], cursor: ProductWhereUniqueInput, take: Int, skip: Int): [Product!]!
   myProducts(distinct: [ProductScalarFieldEnum!], where: ProductWhereInput, orderBy: [ProductOrderByWithRelationInput!], cursor: ProductWhereUniqueInput, take: Int, skip: Int): [Product!]!
   product(where: ProductWhereUniqueInput!): Product!
