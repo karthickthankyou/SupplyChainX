@@ -1284,6 +1284,7 @@ export type ProductQuery = {
   product: {
     __typename?: 'Product'
     name: string
+    description?: string | null
     createdAt: any
     transactions: Array<{
       __typename?: 'Transaction'
@@ -2675,6 +2676,7 @@ export const ProductDocument = /*#__PURE__*/ {
               kind: 'SelectionSet',
               selections: [
                 { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
                 {
                   kind: 'Field',

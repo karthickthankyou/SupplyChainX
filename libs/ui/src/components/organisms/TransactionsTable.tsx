@@ -29,7 +29,7 @@ export const TransactionsTable = ({
         </TableHeader>
         <TableBody>
           {transactions?.map((transaction) => (
-            <TableRow>
+            <TableRow key={transaction.id}>
               <TableCell>{transaction.id}</TableCell>
               <TableCell>
                 {format(new Date(transaction.createdAt), 'PPp')}

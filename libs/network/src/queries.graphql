@@ -171,6 +171,7 @@ mutation reduceInventory(
 query product($where: ProductWhereUniqueInput!) {
   product(where: $where) {
     name
+    description
     createdAt
     transactions {
       id

@@ -10,6 +10,7 @@ export const ProductDetails = ({
   return (
     <div>
       <Title>{product.name}</Title>
+      <Description>{product.description}</Description>
       <Description>{format(new Date(product.createdAt), 'PPp')}</Description>
     </div>
   )
