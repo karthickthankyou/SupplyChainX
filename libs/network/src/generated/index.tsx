@@ -1146,6 +1146,7 @@ export type DistributorMeQuery = {
     uid: string
     createdAt: any
     user: { __typename?: 'User'; image?: string | null; name: string }
+    warehouses: Array<{ __typename?: 'Warehouse'; name: string; id: number }>
   } | null
 }
 
@@ -1158,6 +1159,7 @@ export type RetailerMeQuery = {
     uid: string
     createdAt: any
     user: { __typename?: 'User'; image?: string | null; name: string }
+    warehouses: Array<{ __typename?: 'Warehouse'; name: string; id: number }>
   } | null
 }
 
@@ -1170,6 +1172,8 @@ export type ManufacturerMeQuery = {
     uid: string
     createdAt: any
     user: { __typename?: 'User'; image?: string | null; name: string }
+    warehouses: Array<{ __typename?: 'Warehouse'; name: string; id: number }>
+    products: Array<{ __typename?: 'Product'; name: string; id: number }>
   } | null
 }
 
@@ -1457,6 +1461,81 @@ export type MyWarehousesQuery = {
   }>
 }
 
+export type WarehouseQueryVariables = Exact<{
+  where: WarehouseWhereUniqueInput
+}>
+
+export type WarehouseQuery = {
+  __typename?: 'Query'
+  warehouse: {
+    __typename?: 'Warehouse'
+    id: number
+    name: string
+    description?: string | null
+    createdAt: any
+    location?: {
+      __typename?: 'Location'
+      address: string
+      latitude: number
+      longitude: number
+    } | null
+    ins: Array<{
+      __typename?: 'Transaction'
+      id: number
+      quantity: number
+      createdAt: any
+      toWarehouse?: {
+        __typename?: 'Warehouse'
+        name: string
+        id: number
+      } | null
+      fromWarehouse?: {
+        __typename?: 'Warehouse'
+        name: string
+        id: number
+      } | null
+      product: {
+        __typename?: 'Product'
+        name: string
+        image?: string | null
+        id: number
+      }
+    }>
+    outs: Array<{
+      __typename?: 'Transaction'
+      id: number
+      quantity: number
+      createdAt: any
+      toWarehouse?: {
+        __typename?: 'Warehouse'
+        name: string
+        id: number
+      } | null
+      fromWarehouse?: {
+        __typename?: 'Warehouse'
+        name: string
+        id: number
+      } | null
+      product: {
+        __typename?: 'Product'
+        name: string
+        image?: string | null
+        id: number
+      }
+    }>
+    inventories: Array<{
+      __typename?: 'Inventory'
+      quantity: number
+      product: {
+        __typename?: 'Product'
+        name: string
+        image?: string | null
+        id: number
+      }
+    }>
+  }
+}
+
 export const namedOperations = {
   Query: {
     getCredentials: 'getCredentials',
@@ -1468,6 +1547,7 @@ export const namedOperations = {
     product: 'product',
     myTransactions: 'myTransactions',
     myWarehouses: 'myWarehouses',
+    warehouse: 'warehouse',
   },
   Mutation: {
     createUserWithCredentials: 'createUserWithCredentials',
@@ -1799,6 +1879,17 @@ export const DistributorMeDocument = /*#__PURE__*/ {
                     ],
                   },
                 },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'warehouses' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                    ],
+                  },
+                },
               ],
             },
           },
@@ -1836,6 +1927,17 @@ export const RetailerMeDocument = /*#__PURE__*/ {
                     ],
                   },
                 },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'warehouses' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                    ],
+                  },
+                },
               ],
             },
           },
@@ -1870,6 +1972,28 @@ export const ManufacturerMeDocument = /*#__PURE__*/ {
                     selections: [
                       { kind: 'Field', name: { kind: 'Name', value: 'image' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'warehouses' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'products' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                     ],
                   },
                 },
@@ -3160,3 +3284,188 @@ export const MyWarehousesDocument = /*#__PURE__*/ {
     },
   ],
 } as unknown as DocumentNode<MyWarehousesQuery, MyWarehousesQueryVariables>
+export const WarehouseDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'warehouse' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'where' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'WarehouseWhereUniqueInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'warehouse' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'where' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'where' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'location' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'address' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'latitude' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'longitude' },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'ins' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'FragmentSpread',
+                        name: { kind: 'Name', value: 'TransactionDetails' },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'outs' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'FragmentSpread',
+                        name: { kind: 'Name', value: 'TransactionDetails' },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'inventories' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'quantity' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'product' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'name' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'image' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'TransactionDetails' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'Transaction' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'quantity' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'toWarehouse' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'fromWarehouse' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+              ],
+            },
+          },
+          { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'product' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'image' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<WarehouseQuery, WarehouseQueryVariables>

@@ -8,6 +8,7 @@ import { DefaultZoomControls } from './Map/ZoomControls/ZoomControls'
 import { Panel } from './Map/Panel'
 import { Factory, LucideIcon, Store, Warehouse } from 'lucide-react'
 import { MapLine } from './Map/MapLine'
+import { Title2 } from '../atoms/typography'
 
 type Transactions = ProductQuery['product']['transactions']
 const aggregateTransactions = (transactions?: Transactions): Transactions => {
@@ -39,41 +40,44 @@ export const ProductFlow = ({
   product?: ProductQuery['product']
 }) => {
   return (
-    <WorldMap initialViewState={initialViewState}>
-      <Panel position="right-center">
-        <DefaultZoomControls />
-      </Panel>
-      {product?.inventories.map((inventory) => (
-        <Marker
-          anchor="bottom"
-          offset={[0, -6]}
-          key={inventory.id}
-          longitude={inventory.warehouse.location?.longitude || 0}
-          latitude={inventory.warehouse.location?.latitude || 0}
-        >
-          {inventory.warehouse.manufacturer ? (
-            <StyledIcon Icon={Factory} />
-          ) : null}
-          {inventory.warehouse.distributor ? (
-            <StyledIcon Icon={Warehouse} />
-          ) : null}
-          {inventory.warehouse.retailer ? <StyledIcon Icon={Store} /> : null}
-          <div className="absolute p-1 font-semibold translate-y-1/3 -translate-x-1/3 bottom-full left-full">
-            {inventory.quantity}
-          </div>
-        </Marker>
-      ))}
-      {aggregateTransactions(product?.transactions).map((transaction) => (
-        <MapLine
-          key={transaction.id}
-          from={transaction.fromWarehouse?.location}
-          to={transaction.toWarehouse?.location}
-          lineId={`${transaction.id}`}
-        >
-          {transaction.quantity}
-        </MapLine>
-      ))}
-    </WorldMap>
+    <div>
+      <Title2>Product flow</Title2>
+      <WorldMap initialViewState={initialViewState}>
+        <Panel position="right-center">
+          <DefaultZoomControls />
+        </Panel>
+        {product?.inventories.map((inventory) => (
+          <Marker
+            anchor="bottom"
+            offset={[0, -6]}
+            key={inventory.id}
+            longitude={inventory.warehouse.location?.longitude || 0}
+            latitude={inventory.warehouse.location?.latitude || 0}
+          >
+            {inventory.warehouse.manufacturer ? (
+              <StyledIcon Icon={Factory} />
+            ) : null}
+            {inventory.warehouse.distributor ? (
+              <StyledIcon Icon={Warehouse} />
+            ) : null}
+            {inventory.warehouse.retailer ? <StyledIcon Icon={Store} /> : null}
+            <div className="absolute p-1 font-semibold translate-y-1/3 -translate-x-1/3 bottom-full left-full">
+              {inventory.quantity}
+            </div>
+          </Marker>
+        ))}
+        {aggregateTransactions(product?.transactions).map((transaction) => (
+          <MapLine
+            key={transaction.id}
+            from={transaction.fromWarehouse?.location}
+            to={transaction.toWarehouse?.location}
+            lineId={`${transaction.id}`}
+          >
+            {transaction.quantity}
+          </MapLine>
+        ))}
+      </WorldMap>
+    </div>
   )
 }
 

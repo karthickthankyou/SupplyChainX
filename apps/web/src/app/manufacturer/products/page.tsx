@@ -26,7 +26,9 @@ export default async function WarehousesPage() {
       </div>
       <div className="grid grid-cols-3 gap-4">
         {data?.myProducts.map((product) => (
-          <ProductCard product={product} key={product.id} />
+          <Link href={`/manufacturer/products/${product.id}`} key={product.id}>
+            <ProductCard product={product} />
+          </Link>
         ))}
       </div>
     </div>

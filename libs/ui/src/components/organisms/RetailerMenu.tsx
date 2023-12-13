@@ -24,6 +24,11 @@ export const RetailerMenu = ({ retailerMe }: RetailerMeQuery) => {
       <div className="flex flex-col gap-2">
         <Link href="/retailer">Dashboard</Link>
         <Link href="/retailer/warehouses">Manage Warehouses</Link>
+        {retailerMe?.warehouses.map((warehouse) => (
+          <Link href={`/retailer/warehouses/${warehouse.id}`} className="pl-4">
+            {warehouse.name}
+          </Link>
+        ))}
       </div>
     </div>
   )

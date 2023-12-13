@@ -45,6 +45,10 @@ query distributorMe {
       image
       name
     }
+    warehouses {
+      name
+      id
+    }
   }
 }
 query retailerMe {
@@ -54,6 +58,10 @@ query retailerMe {
     user {
       image
       name
+    }
+    warehouses {
+      name
+      id
     }
   }
 }
@@ -65,6 +73,14 @@ query manufacturerMe {
     user {
       image
       name
+    }
+    warehouses {
+      name
+      id
+    }
+    products {
+      name
+      id
     }
   }
 }
@@ -259,6 +275,34 @@ query myWarehouses(
   $where: WarehouseWhereInput
 ) {
   myWarehouses(skip: $skip, take: $take, orderBy: $orderBy, where: $where) {
+    id
+    name
+    description
+    createdAt
+    location {
+      address
+      latitude
+      longitude
+    }
+    ins {
+      ...TransactionDetails
+    }
+    outs {
+      ...TransactionDetails
+    }
+    inventories {
+      quantity
+      product {
+        name
+        image
+        id
+      }
+    }
+  }
+}
+
+query warehouse($where: WarehouseWhereUniqueInput!) {
+  warehouse(where: $where) {
     id
     name
     description

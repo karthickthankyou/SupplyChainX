@@ -4,6 +4,7 @@ import {
   namedOperations,
 } from '@foundation/network/src/generated'
 import { ProductFlow } from '@foundation/ui/src/components/organisms/ProductFlow'
+import { ProductDetails } from '@foundation/ui/src/components/organisms/ProductDetails'
 
 export default async function ProductPage({
   params,
@@ -22,5 +23,14 @@ export default async function ProductPage({
     },
   })
 
-  return <ProductFlow product={data?.product} />
+  if (!data?.product) {
+    return <div>Product not found.</div>
+  }
+
+  return (
+    <div className="space-y-6">
+      <ProductDetails product={data.product} />
+      <ProductFlow product={data.product} />
+    </div>
+  )
 }

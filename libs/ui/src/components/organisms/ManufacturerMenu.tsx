@@ -20,8 +20,24 @@ export const ManufacturerMenu = ({ manufacturerMe }: ManufacturerMeQuery) => {
 
       <div className="flex flex-col gap-2">
         <Link href="/manufacturer">Dashboard</Link>
-        <Link href="/manufacturer/warehouses">Manage Warehouses</Link>
         <Link href="/manufacturer/products">Manage Products</Link>
+        {manufacturerMe?.products.map((product) => (
+          <Link
+            href={`/manufacturer/products/${product.id}`}
+            className="translate-x-4"
+          >
+            {product.name}
+          </Link>
+        ))}
+        <Link href="/manufacturer/warehouses">Manage Warehouses</Link>
+        {manufacturerMe?.warehouses.map((warehouse) => (
+          <Link
+            href={`/manufacturer/warehouses/${warehouse.id}`}
+            className="translate-x-4"
+          >
+            {warehouse.name}
+          </Link>
+        ))}
       </div>
     </div>
   )

@@ -6,6 +6,7 @@ import {
 } from '@foundation/network/src/generated'
 import Link from 'next/link'
 import { WarehouseCard } from '@foundation/ui/src/components/organisms/WarehouseCard'
+import { WarehouseDetails2 } from '@foundation/ui/src/components/organisms/WarehouseDetails2'
 
 export default async function WarehousesPage() {
   const { data, error } = await fetchGraphQLServer({
@@ -25,10 +26,16 @@ export default async function WarehousesPage() {
         <Link href="/distributor/createWarehouse">New</Link>
       </div>
       {data?.myWarehouses.length === 0 ? <div>No warehouses found.</div> : null}
-
-      {data?.myWarehouses.map((warehouse) => (
-        <WarehouseCard warehouse={warehouse} key={warehouse.id} />
-      ))}
+      <div className="grid grid-cols-3">
+        {data?.myWarehouses.map((warehouse) => (
+          <Link
+            href={`/distributor/warehouses/${warehouse.id}`}
+            key={warehouse.id}
+          >
+            <WarehouseDetails2 warehouse={warehouse} />
+          </Link>
+        ))}
+      </div>
     </div>
   )
 }
