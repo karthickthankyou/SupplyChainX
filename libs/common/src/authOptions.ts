@@ -11,7 +11,7 @@ import { JWT } from 'next-auth/jwt'
 import GoogleProvider from 'next-auth/providers/google'
 import CredentialsProvider from 'next-auth/providers/credentials'
 
-import { fetchGraphQLStatic } from './fetch/static'
+import { fetchGraphQL } from './fetch'
 
 const MAX_AGE = 1 * 24 * 60 * 60
 
@@ -35,7 +35,7 @@ export const authOptions: NextAuthOptions = {
           throw new Error('Email and password are required')
         }
 
-        const auth = await fetchGraphQLStatic({
+        const auth = await fetchGraphQL({
           document: GetCredentialsDocument,
           variables: { email: email },
         })
@@ -125,14 +125,14 @@ export const authOptions: NextAuthOptions = {
         //   Create user
         const { id, name, image } = user
 
-        const existingUser = await fetchGraphQLStatic({
+        const existingUser = await fetchGraphQL({
           document: GetAuthProviderDocument,
           variables: {
             uid: id,
           },
         })
         if (!existingUser.data?.getAuthProvider?.uid) {
-          const newUser = await fetchGraphQLStatic({
+          const newUser = await fetchGraphQL({
             document: CreateUserWithProviderDocument,
             variables: {
               createUserWithProviderInput: {
